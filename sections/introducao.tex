@@ -1,0 +1,44 @@
+\section{INTRODUÇÃO}
+\label{sec:intro}
+
+\subsection{Contextualização e Motivação}
+Redes de sensores sem fios (RSSF) são redes compostas por vários nós sensores. Esses nós sensores são compostos por um processador de baixo poder de processamento, um rádio de baixa potência e memória de tamanho reduzido. Eles são alimentados por uma bateria e por isso possuem limitações energéticas na sua utilização. Além disso, existem várias limitações e dificuldades no projeto de uma RSSF, como a programação em baixo nível dos nós sensores, a especificidade do comportamento de cada nó sensor, entre outras questões que afetam sistemas massivamente distribuídos.
+
+As RSSF são muito versáteis. Além do custo de implantação relativamente reduzido, elas possibilitam o monitoramento e mapeamento de regiões de alto risco. Pode-se utilizar RSSF para monitoramentos sismográficos em vulcões, monitoramento de temperatura e pressão em plataformas petrolíferas, mapeamento de florestas e de regiões hostis \cite{Yang2010}.
+
+Apesar da versatilidade das RSSF, a programação da rede é uma tarefa complexa. A aplicação deve ser desenvolvida e customizada para cada nó sensor da rede, uma vez que o comportamento de cada nó depende de fatores específicos como posição geográfica, estado do nó, função do sensor, entre outros. Essa heterogeneidade das RSSF torna o processo do desenvolvimento e da programação dos nós sensores da rede uma tarefa árdua. Portanto, a programação e configuração automática de aplicações para RSSF é um recurso muito desejável, uma vez que diminui drasticamente o esforço humano na programação de aplicações em RSSF. Assim, a contribuição desse trabalho será o desenvolvimento de um \emph{framework} que proporcionará a programação automática de aplicações para RSSF, facilitando a utilização desse tipo de rede nos diversos problemas do mundo real. Além disso, na literatura atual se encontram poucos trabalhos que aplicam a PG com o intuito de programar uma RSSF como um todo. Dessa forma, o presente trabalho investiga novos aspectos da utilização de PG em RSSF.
+
+\subsection{Objetivos Gerais e Específicos}
+O objetivo geral do presente trabalho é desenvolver um \emph{framework} capaz de gerar, de forma automática, o código-fonte de aplicações para RSSF. Esse \emph{framework} é composto por três camadas: Um simulador de RSSF, um \emph{middleware} que provê uma linguagem \emph{script} de alto nível para programação de aplicações para RSSF e um método baseado em programação genética para gerar automaticamente aplicações para este middleware.
+
+Os seguintes objetivos específicos foram estabelecidos:
+\begin{itemize}
+\setlength{\itemsep}{-0.3ex}
+\item Desenvolver uma linguagem \emph{script} que permita a descrição de aplicações para RSSF. Essa linguagem deve ser expressiva o suficiente para permitir o desenvolvimento de diferentes tipos de aplicações.
+\item Desenvolver um \emph{middleware} que seja capaz de interpretar essa linguagem \emph{script} e possibilite a programação de RSSF em alto nível.
+\item Adaptar o simulador GRUBIX \cite{Grubix} para realizar simulações de RSSF mais rápidas e simplificadas, uma vez que as simulações dos \emph{scripts} serão realizadas de forma intensiva no \emph{framework} proposto.
+\item Desenvolver diferentes algoritmos de programação genética para modelar o objetivo geral de uma RSSF e gerar automaticamente aplicações que visam alcançar esse objetivo.
+\item Integrar os três módulos (módulo de simulação, \emph{middleware}, módulo de geração de aplicações) e desenvolver um \emph{framework} para geração automática de aplicações para RSSF.
+\item Desenvolver um gerador de instâncias para testes do \emph{framework} proposto. Esse gerador deve gerar instâncias que representem um problema de detecção de eventos utilizando RSSF.
+\item Criar um \emph{benchmark} de instâncias para testes utilizando o gerador desenvolvido. Essas instâncias devem contemplar diferentes tamanhos e características de uma RSSF.
+\item Avaliar o desempenho do \emph{framework} proposto ao solucionar o \emph{benchmark} de instâncias criado.
+\end{itemize}
+
+\subsection{Metodologia}
+Um \emph{middleware} específico para facilitar a geração automática de aplicações para RSSF foi desenvolvido. Esse \emph{middleware} provê uma linguagem de programação \emph{script} que possibilita a programação das RSSF em alto nível e a reprogramação dos nós sensores de forma eficiente. Esse \emph{middleware} é incorporado à um módulo de simulação, adaptado do simulador GRUBIX \cite{Grubix}, para proporcionar um ambiente de programação de RSSF em alto nível com suporte a simulações dessas aplicações. Este \emph{middleware} recebeu o nome de \textbf{Odin}.
+
+Um módulo de Programação Genética foi construído contendo diversos algoritmos para realização da programação automática de aplicações para RSSF. Foi desenvolvido um algoritmo baseado em Algoritmos Genéticos (AG). Este módulo de PG utiliza-se de uma função objetivo que deve ser definida pelo projetista da RSSF. Através dessa função objetivo, o módulo é capaz de gerar populações de programas e evoluí-los por meio de operadores genéticos (como mutações e recombinações). Esse módulo de PG recebeu o nome de \textbf{GeneticNet}.
+
+A integração do módulo GeneticNet com o ambiente de simulação composto pelo \emph{middleware} Odin e o módulo de simulação forma um \emph{framework} específico para geração automática de aplicações para RSSF. Este \emph{framework} foi testado e avaliado analisando o desempenho das aplicações geradas para solucionar problemas de detecção de eventos utilizando RSSF.
+
+\subsection{Trabalhos Publicados}
+Os resultados obtidos neste estudo foram publicados em eventos científicos de ampla divulgação:
+\begin{itemize}
+\item The 2013 IEEE Congress on Evolutionary Computation, Cancún, México \cite{Oliveira2013a}.
+\item Workshop on Software Technologies for Future Embedded and Ubiquitous Systems, Paddeborn, Alemanha \cite{Heimfarth2013}.
+\item III Workshop de Sistemas Distribuídos Autonômicos, Brasília, Brasil \cite{Oliveira2013b}.
+\end{itemize}
+
+\subsection{Organização do Trabalho}
+O trabalho está organizado da seguinte forma, na Seção~\ref{sec:review} será apresentado um referencial teórico acerca dos conceitos utilizados. Na Seção~\ref{sec:metod} será apresentada a metodologia do trabalho desenvolvido. Na Seção~\ref{sec:results} serão apresentadas as simulações computacionais realizadas e os resultados obtidos. As conclusões e os trabalhos futuros serão apresentadas na Seção~\ref{sec:conclusion}.
+

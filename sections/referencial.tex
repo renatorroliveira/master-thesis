@@ -1,0 +1,94 @@
+\section{REFERENCIAL TEÓRICO}
+\label{sec:review}
+
+% Faltou um referencial teórico sobre:
+%%% RSSF
+%%% Simuladores de RSSF
+%%% GRUBIX
+%%% Aplicações para RSSF
+%
+
+\subsection{Redes de Sensores sem Fio}
+As Redes de Sensores sem Fio (RSSF) são uma tecnologia recente que tem crescido muito nos últimos anos. As RSSF são compostas por dispositivos eletrônicos (nós sensores) independentes que possuem capacidade de comunicação sem fio (\emph{wireless}). Os nós sensores possuem capacidade de processamento computacional, comunicação sem fio, sensores que são capazes de realizar medições no ambiente (sismógrafos, termômetros, barômetros, entre outros) e atuadores que podem interagir com o ambiente. Esses nós sensores normalmente são alimentados por baterias, o que torna o consumo energético uma questão chave neste tipo de tecnologia. Esse tipo de tecnologia de sistema embarcado tem sido utilizada como uma forma de computação ubíqua, sendo aplicada em diversas áreas da vida humana, como agricultura, monitoramento, rastreamento e até mesmo para controlar componentes domésticos simples, como luzes, cortinas, eletrodomésticos, entre outros \cite{Karl2005}. A computação ubíqua é definida como uma forma onipresente de computação, é um conjunto de aparelhos e dispositivos eletrônicos que realizam computação de forma transparente e imperceptível para os usuários \cite{Hansmann2003}.
+
+Apesar de cada nó sensor da rede possuir a capacidade de processamento e sensoriamento de forma individual, em aplicações de RSSF um nó sensor não é capaz de atingir o objetivo da rede individualmente. É necessário que os nós sensores cooperem entre si, através de comunicação sem fio, para que consigam alcançar o objetivo da RSSF. Essa característica acarreta em diversas dificuldades no desenvolvimento do software que controlará a operação da RSSF. A flexibilidade e a heterogeneidade das RSSF requerem que o software de controle seja capaz de tratar a abstrair as diferenças e características de cada nó sensor individual. É necessário que este software seja capaz de tratar a RSSF como um todo para que o objetivo seja alcançado.
+
+Devido à estas características especiais das RSSF, diversas pesquisas são realizadas no intuito desenvolver arquiteturas e protocolos que sejam mais adequados às necessidades deste tipo rede. \citeonline{Akyildiz2002} realizaram uma revisão da literatura englobando todas as áreas de pesquisa em RSSF. Diversos protocolos e arquiteturas já desenvolvidas para RSSF são detalhados por \citeonline{Karl2005}. Uma revisão mais recente da literatura é realizada por \citeonline{Guo2014}, que focam suas análises em protocolos inteligentes para RSSF.
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Simuladores de RSSF}
+Devido às características das RSSF e por serem sistemas massivamente distribuídos, os experimentos com dispositivos (nós sensores) reais são caros e muito demorados, em alguns casos se tornando impraticáveis \cite{Xue2007}. Essa dificuldade trouxe a necessidade de se desenvolver simuladores para que protocolos e arquiteturas desenvolvidas em pesquisas pudessem ser previamente testados e avaliados. Essa necessidade existe porque a implantação e construção de arquiteturas em nós sensores reais é difícil e consome muito tempo e recursos. Após essa avaliação preliminar com simuladores, esses protocolos e arquiteturas podem ser implantados e avaliados em RSSF reais, com nós sensores físicos.
+
+Existem vários simuladores de redes de computadores (não apenas RSSF) disponíveis atualmente. Muitos desses simuladores suportam a simulação de redes sem fio e ad hoc, permitindo que sejam usados para simular RSSF. Esses simuladores são complexos e simulam desde o meio físico de comunicação (cabo, ar, entre outros) até as características de software e hardware dos nós da rede, como baterias, rádios de comunicação, sensores e pilhas de protocolos.
+
+Dentre os diversos simuladores de redes disponíveis atualmente, pode-se destacar alguns importantes. O ns-3 \cite{NS3} é um simulador de redes escrito em C$++$ e Python muito popular no meio acadêmico. Ele é principalmente utilizado para simulações de redes sem fio, o que contempla o universo das RSSF. O ns-3 é um software gratuito e de código-fonte aberto (\emph{open source}), o que incentiva sua utilização em pesquisas.
+
+Outro simulador de redes de código-fonte aberto é o GNS3 \cite{GNS3}, que tem como principal característica a simulação de redes complexas, englobando diversos roteadores, \emph{switches} e vários tipos de dispositivos com capacidade de se conectar à uma rede. O GNS3 possui uma interface gráfica para modelagem e configuração da rede que será simulada, o que facilita estes processos para quem não possui conhecimento de programação de computadores.
+
+Um outro simulador gratuito é o Grubix \cite{Grubix}, que é desenvolvido na linguagem de programação Java e é focado em simulações de redes sem fio ad hoc. Este simulador é implementado seguindo uma arquitetura orientada à eventos (\emph{discrete event network simulation}).
+
+Devido ao fato dos simuladores de redes contemplarem quase todas as características de uma rede real, as simulações realizadas com estes softwares demandam muito tempo para serem executadas. No contexto do atual estudo, é necessário que as aplicações geradas pelo \emph{framework} proposto sejam simuladas de forma intensiva (dezenas a centenas de vezes por segundo). Os primeiros experimentos realizados utilizaram o simulador Grubix para avaliar os programas gerados pela PG. Para solucionar um cenário simples com poucos nós sensores, o \emph{framework} necessitava de 3 dias de execução. Portanto é impraticável a utilização de um simulador de redes completo para simular e avaliar as aplicações geradas pela PG. Dessa forma, foi desenvolvido um módulo de simulação simplificado para realizar a avaliação das aplicações geradas.
+
+O módulo simplificado desenvolvido foi utilizado para solucionar o mesmo cenário em que o simulador Grubix foi aplicado, o tempo de execução caiu de 3 dias para 2 minutos. Esse módulo de simulação foi desenvolvido baseado na arquitetura interna do simulador Grubix \cite{Grubix}. Essa foi escolha deve-se ao fato de que o Grubix é um simulador específico para simulações de redes sem fio adhoc, o que torna sua arquitetura mais simples e mais adequada às necessidades do \emph{framework} proposto.
+
+%%
+%%%%
+%%%%%%
+\subsection{Middlewares}
+Middlewares são abstrações na camada de aplicação das RSSF que permitem simplificar a programação de uma rede heterogênea, facilitando
+a gestão de recursos e energia \cite{Wang2008}. Eles devem prover a coordenação dos nós sensores, através da distribuição de tarefas de baixo nível equivalentes às tarefas de alto nível recebida como entrada, fundir os resultados obtidos pelos nós individualmente e apresentar um \textit{feedback} para o usuário, além de ter mecanismos que promovam a eficiência energética, robustez e escalabilidade \cite{Jin2010}.
+
+Os middlewares (MW) funcionam entre a camada do Sistema Operacional (SO) dos nós sensores e a camada de aplicação e podem ser classificados considerando duas camadas, horizontal e vertical \cite{Ibrahim2009}. A camada horizontal define o tipo de MW, ou seja, a sua implementação. Já a camada vertical se preocupa com as propriedades que cada MW possui considerando os ambientes em que estão inseridos.
+
+Existem outras classificações de diversos MWs. O MW proposto se encaixa melhor na categoria de MWs orientados à eventos. O paradigma orientado a eventos é um dos mais recentes tipos de MW existente, embora seja muito promissor há poucos estudos nesta área \cite{Jin2010}. O MW mais notável na categoria de MWs
+orientados à eventos é o \textit{Impala} \cite{liu2003}. O \emph{Impala} foi criado visando dar suporte à um projeto maior, denominado ZebraNet, que visa o rastreamento de animais e mapeamento do meio-ambiente. O \emph{Impala} possui algumas características similares ao Odin, como a implantação sem fio de novas aplicações, gerenciamento das características específicas de hardware e do rádio de comunicação, entre outras. A principal diferença é a linguagem de programação em \emph{scripts} provida pelo Odin. Essa linguagem foi desenvolvida e especializada para ser utilizada pela PG, visando aspectos específicos da geração automatizada de código-fonte.
+
+%
+%
+%
+%%%%%%%%%%
+\subsection{Algoritmos Genéticos}
+O Algoritmo Genético (ou \emph{Genetic Algorithm}) é um algoritmo de computação evolutiva inicialmente proposto por \citeonline{Holland1975}. Essa metaheurística baseia-se principalmente no processo de seleção natural. O conceito de seleção natural foi proposto por Charles Darwin em 1859 e consiste na ideia de que as espécies com características mais adaptadas ao meio onde vivem tendem a sobreviver, enquanto as espécies pouco adaptadas tendem a ser extintas. O mesmo raciocínio ocorre para as características genéticas de uma espécie. Uma característica bem adaptada ao meio, se mantém nas gerações seguintes, já as características pouco adaptadas ao meio, tendem a desaparecer.
+
+Darwin acreditava que o meio ambiente seleciona naturalmente os seres que nele vivem. De forma resumida, os seres que são adaptados ao meio em que vivem sobrevivem. Já os seres que não se adaptam morrem e são extintos, assim como características genéticas de uma espécie. Esse conceito de seleção natural leva em conta o conceito de hereditariedade, que é a capacidade dos seres vivos de transmitirem características genéticas aos seus descendentes. Isso ocorre, por exemplo, durante a meiose das células humanas para geração dos gametas (espermatozóide e óvulo). Durante o processo de meiose pode ocorrer um fenômeno chamado \emph{crossing-over}. Este fenômeno ocorre quando um par cromossomos de DNA trocam trechos de sua codificação genética. Esse fenômeno pode trazer variabilidade nas características provenientes do progenitor. Além disso, podem ocorrer mutações aleatórias na codificação genéticas dos gametas produzidos na meiose.
+
+Todos esses conceitos são levados em conta no Algoritmo Genético. Inicialmente define-se uma população de indivíduos. Cada indivíduo representa uma solução do problema em questão. Essa população tem seus indivíduos inicializados de forma randômica (ou através de alguma rotina específica para o problema tratado). Em seguida, executa-se o chamado laço de evolução, que ``evolui'' os indivíduos durante um certo número de gerações. Primeiramente é executada uma rotina de seleção, que seleciona dois indivíduos da população para se realizar o cruzamento (ou recombinação, \emph{crossover}). Um novo individuo é gerado nessa recombinação, em seguida ele é processado por uma rotina que realiza mutações em sua codificação. Esse procedimento de seleção, cruzamento e mutação é executado até que a população da próxima geração seja totalmente gerada.
+
+Para avaliar a aptidão dos indivíduos (qualidade das soluções), o AG utiliza uma função de avaliação (ou função de \emph{fitness}). Essa função de avaliação é uma rotina que analisa a codificação de um indivíduo do AG e calcula um valor que indica a qualidade da solução representada por aquele indivíduo. A função de \emph{fitness} leva em conta características do problema para calcular a aptidão do indivíduo, dessa forma são necessárias diferentes funções de \emph{fitness} para problemas distintos.
+
+Existem diversas variações de AG, \citeonline{Toledo2009} propõe um AG que possui múltiplas populações que evoluem independentes. Cada população organiza seus indivíduos em uma estrutura hierárquica baseada em árvores. Periodicamente é executada uma rotina de migração, que copia os melhores indivíduos das populações para a população vizinha. Foram realizados experimentos com este tipo de AG, porém os resultados do AG simples se mostraram mais promissores durante o desenvolvimento do estudo.
+
+%%
+%%%%
+%%%%%%
+\subsection{Programação Genética}
+Programação Genética (PG) é um conjunto de técnicas de computação evolutiva que visa realizar a geração de programas de computador \cite{Koza1992}. Segundo \citeonline{Back1997}, a programação genética utiliza algoritmos evolutivos para evoluir estruturas (indivíduos) que são programas de computador. A função de avaliação (\emph{fitness}) em programação genética consiste em uma medida relacionada à execução desses programas. Segundo os mesmos autores, trata-se de uma busca evolutiva em um espaço possível de programas de computador que sejam capazes de produzir os melhores resultados quando executados. Os programas gerado pela PG podem ser programas independentes ou parte de programas maiores.
+
+A PG é utilizada em diversos campos de aplicação, sendo explorada para gerar programas visando solucionar diversos problemas. \citeonline{Langdon2010} apresentam uma revisão das pesquisas realizadas nas áreas de PG e máquinas evolutivas em um período de dez anos. São apresentados livros sobre o assunto e mostradas algumas estatísticas acerca das pesquisas em PG e máquinas evolutivas. Já \citeonline{Mckay2010} realizam uma revisão bibliográfica acerca de aplicações de PG baseada em gramáticas. O artigo se concentra em mostrar como as gramáticas formais contribuem na solução dos problemas, além de realizar uma análise das prováveis tendências da pesquisa nessa área.
+
+
+%
+%
+%
+%%%%%%%%%%
+\subsection{Estado da Arte}
+Existem na literatura alguns estudos da aplicação de PG na área de redes de sensores. \citeonline{Ohtani2005} desenvolvem um sensor de posicionamento ótico utilizando a PG para realizar a separação da luz proveniente de um sinal ótico e da luz proveniente do fundo. O sensor é composto por um conjunto de sensores distribuídos em uma superfície de duas dimensões. Um algoritmo genético (AG) é utilizado para realizar a PG. \citeonline{Pattananupong2007} propõem um sistema para detectação de deformidades em superfícies táteis utilizando uma pequena rede de sensores. Uma rede neural combinada com PG é utilizada para determinar o estado de contato dos sensores e detectar as deformidades nas superfícies. \citeonline{Tripathi2011} apresentam um método híbrido que une a PG à um AG para realizar o posicionamento de nós sensores em uma RSSF. Enquanto a PG otimiza a estrutura de implantação dos nós sensores, o AG realiza o posicionamento de fato dos nós.
+
+Uma aplicação de PG para geração de protocolos distribuídos de redes (não especificamente para RSSF) é apresentada em \citeonline{ThomasWeise2009}. Os métodos propostos são utilizados para evoluir um algoritmo de eleição. O método denominado ``programação genética padrão com memória'' utiliza a PG baseada em genomas organizados em árvores. O programa é organizado em vários procedimentos, entre eles um procedimento de inicialização e um procedimento que é chamado quando o nó recebe uma mensagem.
+
+Além da PG, algoritmos evolutivos são largamente utilizados na área de RSSF para diversos fins. \citeonline{Nan2008} apresentam uma revisão bibliográfica de diversas aplicações de abordagens evolutivas para solucionar problemas da área de RSSF. AGs também são utilizados para diversos objetivos dentro da área de RSSF. \citeonline{Bhondekar2009} apresentam um método de posicionamento de nós sensores em RSSF baseados em AGs.
+
+
+
+Apesar de Programação Genética, Algoritmos Genéticos e algoritmos evolutivos serem estudados na área de RSSF, abordagens que visam desenvolver e configurar automaticamente a rede de sensores como um todo ainda são limitadas. Um método que visa este objetivo é apresentado por \citeonline{Markham2011}. O artigo apresenta um \emph{framework} para geração automática de controladores de redes reguladoras de genes (RRG) para RSSF. Esses controladores gerados foram utilizados para determinar a atividade e a comunicação dos nós sensores para uma aplicação de rastreamento de alvos. Não ficou claro no artigo se a abordagem é extensível para outros tipos de problemas de RSSF, pois a RRG trabalha baseada em níveis de proteínas e esses níveis de proteínas foram desenvolvidos especificamente para controlar os ciclos de trabalho local (o ciclo de trabalho de cada nó é controlado localmente, sem considerar os outros nós).
+
+Uma abordagem utilizando PG para programar RSSF é apresentada em \citeonline{ThomasWeise2006}. O trabalho apresenta um \emph{framework} para gerar algoritmos distribuídos utilizando PG. Este \emph{framework}, de forma similar ao método proposto, não utiliza um simulador de RSSF com a caracterização física da comunicação, mas uma simulação simplificada específica para obter o \emph{fitness} dos programas gerados.
+
+Ainda em \citeonline{ThomasWeise2006}, os problemas do máximo divisor comum (MDC) entre dois números e da eleição de nó foram solucionados através de uma RSSF. Diferentemente do método proposto, apenas mensagens em \emph{broadcast} foram utilizadas, portanto problemas que envolvem mensagens direcionadas não foram tratados. Dessa forma os algoritmos distribuídos gerados são restritos à inundar a rede com mensagens, eliminando a complexidade das interações específicas entre os nós sensores, o que é bem similar à uma solução centralizada. O objetivo do presente artigo é mais extenso neste aspecto. No método desenvolvido os nós sensores podem enviar mensagens especificamente para um de seus vizinhos, permitindo a geração de soluções espacialmente distribuídas na rede.
+
+Os estudos limitados motivam a investigação e desenvolvimento de um método aplicando essas ideias visando a programação e a configuração automática de RSSF para solucionar diversos problemas.
+
+O presente estudo obteve resultados promissores na programação automatizada de RSSF através de técnicas de PG. Alguns destes resultados foram publicados em eventos científicos de ampla divulgação. \citeonline{Oliveira2013b} apresentam resultados preliminares deste estudo. Resultados de experimentos mais completos podem ser encontrados em \citeonline{Heimfarth2013} e \citeonline{Oliveira2013a}.

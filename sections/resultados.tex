@@ -1,0 +1,259 @@
+\section{RESULTADOS E DISCUSSÃO}
+\label{sec:results}
+Com o intuito de avaliar o \emph{framework} proposto, alguns experimentos computacionais foram realizados para avaliar a capacidade da ferramenta em gerar aplicações para RSSF de forma automatizada. Para isso foi implementado um gerador de instâncias de testes e posteriormente um \emph{benchmark} de instâncias de teste para realizar os experimentos. Nesta seção serão apresentados o gerador de instâncias, o \emph{benchmark} criado e os resultados obtidos com os experimentos computacionais.
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Gerador de Instâncias}
+Um gerador de instâncias foi criado para gerar diferentes RSSF que representem o PDE. Este gerador de instâncias recebe uma configuração de parâmetros que diz quais características as instâncias que serão geradas devem possuir. A \tablename~\ref{tb:geraparams} apresenta estes parâmetros e suas respectivas descrições.
+
+
+\begin{table}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\caption{Parâmetros do gerador de instâncias.}
+\begin{tabularx}{\textwidth}{|l X|}
+\hline\hline
+Parâmetro: & Descrição:\\
+\hline\hline
+fieldSizeX: & Largura da área onde a RSSF estará (tamanho da dimensão X). \\ \hline
+fieldSizeY: & Altura da área onde a RSSF estará (tamanho da dimensão Y). \\ \hline
+numberOfNodes: & Número total de nós sensores na RSSF. \\ \hline
+activeMemorySize: & Tamanho da memória ativa dos nós sensores da rede. \\ \hline
+passiveMemorySize: & Tamanho da memória passiva dos nós sensores da rede. \\ \hline
+transmissionRange: & Alcance (em metros) da transmissão sem fio dos nós sensores. \\ \hline
+numberOfEventTriggers: & Número total de eventos que serão detectados durante a simulação. \\ \hline
+simulationMaxTime: & Tempo total (virtual) que a simulação terá. \\ \hline
+nodePlacementType: & Tipo de posicionamento dos nós sensores. Este parâmetro define a topologia da RSSF que será gerada. Existem três tipos, o primeiro posiciona os nós em grade, o segundo posiciona os nós aleatoriamente no campo, o terceiro posiciona os nós aleatoriamente também, porém eles só podem ocupar uma posição no campo que seja conexa aos outros nós já posicionados na rede. \\ \hline
+\hline
+\end{tabularx}
+\label{tb:geraparams}
+\end{table}
+
+
+
+%
+%
+%%% SIMULAÇÕES COMPUTACIONAIS
+\subsection{Instâncias de Teste Criadas (\emph{Benchmark})}
+\label{sec:insts}
+Para avaliar o desempenho da abordagem proposta, oito instâncias de teste foram criadas utilizando o gerador de instâncias desenvolvido. Esse \emph{benchmark} foi criado pois não existe na literatura um conjunto de instâncias similares para que o experimentos fossem realizados. Cada instância de teste representa um RSSF para solucionar o PDE, onde cada nó sensor da rede possui uma posição fixa. Além disso, uma instância de teste possui outras informações como qual nó da RSSF é o nó \emph{sink}, quais nós da rede detectarão um evento durante uma simulação, o alcance de transmissão sem fio dos nós sensores e o número total de nós na rede. A \figurename~\ref{fig:simparams} na seção~\ref{sec:sim} apresenta e descreve essas informações. Dentre estas oito instâncias geradas, foram contempladas instâncias com dois tipos de topologia, em grade (\emph{grid}) e topologia randômica (aleatória).
+
+A \tablename~\ref{tb:insts} apresenta as principais características de cada uma das oito instâncias que compõem o \emph{benchmark} de testes. O `R' no nome das instâncias indica que esta instância possui topologia randômica. Já o `G' indica que a instância possui topologia em grade. O número contido no nome das instâncias indica o número total de nós sensores da RSSF representada por esta instância. Essa tabela apresenta também as dimensões (em metros) da área monitorada pela RSSF.
+
+
+\begin{table}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\caption{Principais características das instâncias de teste do \emph{benchmark}.}
+\begin{tabularx}{\textwidth}{X c X X}
+\hline\hline
+           & Num. de & Dimensões &           \\
+Instância  & Nós     & da Área   & Topologia \\
+\hline\hline
+G25  & 25  & 40m x 40m   & Em Grade \\
+G49  & 49  & 60m x 60m   & Em Grade \\
+G225 & 225 & 140m x 140m & Em Grade \\
+G625 & 625 & 240m x 240m & Em Grade \\
+R25  & 25  & 40m x 40m   & Randômica \\
+R49  & 49  & 60m x 60m   & Randômica \\
+R225 & 225 & 140m x 140m & Randômica \\
+R625 & 625 & 240m x 240m & Randômica \\
+\hline\hline
+\end{tabularx}
+\label{tb:insts}
+\end{table}
+
+
+A \figurename~\ref{fig:r25} apresenta uma ilustração da instância R25. Na figura os círculos representam os nós sensores da RSSF e as linhas representam a conectividade de comunicação sem fio dos nós. Os círculos maiores (rotulados como ``Evento'') representam os nós sensores que irão detectar algum evento durante a simulação. Já o círculo central (rotulado como ``Nó Sink'') representa o nó \emph{sink} que deve ser informado sobre a detecção de eventos na rede. A instância R25 é a mais simples dentre as instâncias com topologia randômica, dessa forma, fica mais fácil de entender o que uma instância de testes representa.
+
+
+\begin{figure}[!h!t!b]
+ \centering
+\vspace*{11pt}
+
+ \includegraphics[width=0.95\columnwidth]{img/random-topology-25.pdf}
+ \caption{Ilustração da topologia de rede da instância R25.}
+ \label{fig:r25}
+\end{figure}
+
+
+As instâncias com topologia em grade são mais fáceis de se solucionar. Isso ocorre pois a solução ótima (\emph{script} de controle ótimo) é simples e idêntica para qualquer tamanho de instância (número de nós na rede). Com isso a PG consegue obter a solução ótima para essas instâncias muito mais rápido do que para as instâncias de topologia randômica.
+
+Em vários casos a PG precisa desenvolver comportamentos específicos para algumas regiões da RSSF quando está solucionando uma instância de topologia randômica. Isso ocorre pois essas instâncias podem conter regiões mais difíceis no contexto do roteamento das mensagens até o nó \emph{sink}. Por exemplo, na \figurename~\ref{fig:r25} a região noroeste da rede precisa ser tratada de forma específica pelo \emph{script} de controle, uma vez que os nós nesta região não têm um caminho direto até o nó \emph{sink}. Esse problema já não ocorre quando trata-se de instâncias com topologia em grade, como pode-se observar na \figurename~\ref{fig:g49} que apresenta uma ilustração da instância G49.
+
+
+
+\begin{figure}[!h!t!b]
+ \centering
+\vspace*{11pt}
+
+ \includegraphics[width=0.95\columnwidth]{img/grid-topology-49.pdf}
+ \caption{Ilustração da topologia de rede da instância G49.}
+ \label{fig:g49}
+\end{figure}
+
+
+
+%%
+%%
+%%%%%%%%% RESULTADOS
+\subsection{Experimentos Computacionais e Resultados Obtidos}
+\label{sec:experiments}
+
+\subsubsection{Configurações dos Experimentos}
+Para avaliar o \emph{framework} desenvolvido, este foi executado para solucionar as oito instâncias de testes descritas na seção~\ref{sec:insts}. O método desenvolvido foi executado 10 (dez) vezes em cada uma das instâncias de teste e os valores médios obtidos são considerados nas análises que seguem (também são analisados valores máximos e mínimos). A utilização de um valor médio de várias execuções nas análises é essencial, uma vez que a PG é um método estocástico e pode fornecer diferentes soluções quando executada mais de uma vez com os mesmos parâmetros. Além disso, a análise de valores médios serve também como uma análise de estabilidade do método proposto.
+
+Todos os experimentos aqui reportados foram realizados em computadores idênticos. Esses computadores possuem cada um deles, um processador Core 2 Duo 2,66GHz, 2GB de memória RAM e executam o sistema operacional Gentoo Linux 64 bits. O \emph{framework} foi implementado utilizando a linguagem de programação C$++$ e compilado através do GNU Cross Compiler (GCC).
+
+A PG foi configurada com os parâmetros descritos na \tablename~\ref{tb:pgparams}. Todos estes parâmetros foram ajustados através de testes empíricos. A alta taxa de mutação utilizada justifica-se pelo fato de que novos comandos e novas \emph{triggers} só são criados por operadores de mutação. Operadores de recombinação só conseguem reorganizar os genes já existentes dentre os indivíduos da população. Veja a seção~\ref{sec:operators} para mais detalhes sobre os operadores genéticos utilizados.
+
+\begin{table}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\caption{Configuração de parâmetros utilizada na PG.}
+\begin{tabularx}{\textwidth}{X l}
+\hline\hline
+Parâmetro: & Valor Utilizado:\\
+\hline\hline
+Número de Indivíduos & 20\\
+Taxa de Recombinação & 0,65\\
+Taxa de Mutação & 0,85\\
+Tamanho do Torneio & 3\\
+Elistismo & Sim\\
+Número de Gerações & 2.000\\
+\hline\hline
+\end{tabularx}
+\label{tb:pgparams}
+\end{table}
+
+
+Os custos utilizados na função objetivo (veja a seção~\ref{sec:fitness} para mais detalhes) foram ajustados tentando traduzir da forma mais fiel possível a importância de cada componente da função objetivo. A \tablename~\ref{tb:fitcosts} apresenta os custos utilizados nos experimentos. Alguns testes empíricos foram realizados para ajudar no ajuste desses custos.
+
+
+\begin{table}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\caption{Configuração dos custos  utilizados na função objetivo da PG.}
+\begin{tabularx}{\textwidth}{X X}
+\hline\hline
+Custo: & Valor Utilizado:\\
+\hline\hline
+$C_{ms}$ & $2$\\
+$C_{pa}$ & $2.500$\\
+$C_{el}$ & $5.000$\\
+$C_{pm}$ & 500\\
+$C_{mwd}$ & 500\\
+$C_{ed}$ & 500\\
+\hline\hline
+\end{tabularx}
+\label{tb:fitcosts}
+\end{table}
+
+
+
+%%
+%%%%
+%%%%%%
+\subsubsection{Resultados dos Experimentos}
+Os resultados obtidos pelo \emph{framework} após ser executado dez vezes para cada uma das oito instâncias de testes são apresentados na \tablename~\ref{tb:results}. São exibidos os valores de \emph{fitness} do melhor indivíduo encontrado após as 2.000 gerações da PG. Para cada instância, são apresentados os valores médios, mínimos e máximos de \emph{fitness}. O coeficiente de variação do \emph{fitness} nas dez execuções também é reportado. Por último é apresentado o tempo médio de execução das 2.000 gerações para cada instância. O tempo de execução é um valor médio das dez execuções. O valor de \emph{fitness} considerado é o \emph{fitness} do melhor indivíduo da população da PG após cada execução de cada instância.
+
+
+\begin{table}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\caption{Resultados obtidos nos experimentos computacionais.}
+\begin{tabularx}{\textwidth}{X X X X X X}
+\hline\hline
+	        &	\multicolumn{3}{c}{Fitness da Melhor Solução} & Coeficiente & Tempo\\
+Instância	&	Média	&	Mínimo	&	Máximo	&	de Varia.	&	Total(s)	\\
+\hline\hline
+G25	&	22,6	&	20	&	27	&	13,55\%	&	55,1	\\
+G49	&	29	&	29	&	29	&	0,00\%	&	116,6	\\
+G225	&	61	&	61	&	61	&	0,00\%	&	654,7	\\
+G625	&	101	&	101	&	101	&	0,00\%	&	2.135	\\
+R25	&	32,9	&	30	&	53	&	22,22\%	&	88,7	\\
+R49	&	84,8	&	43	&	189	&	70,75\%	&	208,4	\\
+R225	&	1.157	&	376	&	2.722	&	77,74\%	&	1.927,3	\\
+R625	&	2.756.2	&	461	&	4.384	&	47,27\%	&	4.447,4	\\
+\hline\hline
+\end{tabularx}
+\label{tb:results}
+\end{table}
+
+
+Inicialmente, os resultados mostram claramente a diferença de dificuldade entre as instâncias com topologia de rede em grade e as instâncias com topologia de rede randômica. Os resultados nas instâncias com topologia em grade mostram uma grande estabilidade do método, além de uma alta qualidade das soluções encontradas. As melhores soluções encontradas para estas instâncias foram analisadas e foi possível observar que elas possuem o comportamento ótimo. Isto é, em todas as instâncias de topologia de rede em grade o \emph{framework} foi capaz de encontrar a solução ótima para elas. A solução ótima para estas instâncias pode ser facilmente escrita manualmente por um projetista, dessa forma, comparando o \emph{fitness} da solução ótima escrita manualmente com o \emph{fitness} da solução obtida pelo \emph{framework}, é fácil verificar se o comportamento das soluções encontradas pela PG é o comportamento ótimo.
+
+A \figurename~\ref{fig:solg49} apresenta o \emph{script} de comportamento ótimo encontrado para a instância G49. O evento ativo A0 é a posição da memória ativa que representa o evento detectado. Já os eventos ativos A1 até A4 são eventos escritos pela versão simulada do \emph{middleware} que indicam a direção geográfica (norte, sul, leste ou oeste) que o nó \emph{sink} se encontra. As direções são A1 para o norte, A2 para leste, A3 para sul e A4 para oeste. No caso das instâncias de topologia em grade, a solução ótima nada mais é que enviar a mensagem do evento para o nó vizinho que está na mesma direção do nó \emph{sink}. Este \emph{script} precisou enviar 12 mensagens durante toda a simulação para solucionar a instância G49 (\figurename,~\ref{fig:g49}).
+
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\fbox{\begin{minipage}{0.98\textwidth}
+\begin{algorithm}[H]
+\If{P0 and A3}{
+	send(P0, down)\;
+}
+\If{P0 and A1}{
+	send(P0, up)\;
+}
+\If{A2 and P0}{
+	send(P0, right)\;
+}
+\If{A4 and P0}{
+	send(P0, left)\;
+}
+\If{A0 or P0}{
+	up(P0)\;
+}
+\end{algorithm}
+\end{minipage}}
+\caption{\emph{Script} de comportamento ótimo econtrado pelo \emph{framework} na instância G49.}
+\label{fig:solg49}
+\end{figure}
+
+
+Já nas instâncias com topologia de rede randômica, a qualidade e a estabilidade do método caem consideravelmente. Essas instância necessitaram de aproximadamente o dobro do tempo de execução do que as instâncias com topologia de rede em grade. Isso ocorre pois a complexidade das redes com topologia randômica é bem maior, por isso a simulação de cada indivíduo para o cálculo de \emph{fitness} é mais demorada, já que as soluções necessitam de mais mensagens enviadas para comunicar o nó \emph{sink} da ocorrência do evento. Observou-se que 2.000 gerações da PG não foram suficientes para garantir uma alta qualidade de soluções para redes com topologia complexa.
+
+Apesar da falta de estabilidade em topologias complexas, todas as execuções para todas as oito instâncias de testes foram capazes de encontrar soluções que conseguem entregar todos os eventos ao nó \emph{sink}. Isto é, em todas as execuções dos experimentos realizados, o \emph{framework} foi capaz de solucionar o PDE. A variação de \emph{fitness} das soluções obtidas foi devido à variação da quantidade necessária de mensagens para comunicar o nó \emph{sink} da ocorrência dos eventos.
+
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\fbox{\begin{minipage}{0.98\textwidth}
+\begin{algorithm}[H]
+\If{P0 and A1}{
+	send(P0, up)\;
+}
+\If{P0 and A2}{
+	send(P0, down)\;
+}
+\If{A4 and P0}{
+	send(P0, down)\;
+}
+\If{P0 or A0}{
+	up(P0)\;
+}
+\end{algorithm}
+\end{minipage}}
+\caption{\emph{Script} com o melhor comportamento econtrado pelo \emph{framework} na instância R25.}
+\label{fig:solr25}
+\end{figure}
+
+
+A \figurename~\ref{fig:solr25} apresenta o \emph{script} com o melhor comportamento encontrado para a instância R25. Os eventos passivos e ativos têm o mesmo significado que no \emph{script} da instância G49 (\figurename,~\ref{fig:solg49}). A principal diferença que se nota em relação ao \emph{script} da instância G49 é que os comandos de envio de mensagens não são todos para o vizinho na direção do nó \emph{sink}. Por exemplo, seguindo o \emph{script}, para os nós sensores cujo o nó \emph{sink} esteja à leste, as mensagens são encaminhadas para o vizinho mais próximo ao sul. Essas regras de roteamento são desenvolvidas para tratar aspectos específicos da instância R25.
+
+Os resultados obtidos nos experimentos mostraram que o \emph{framework} desenvolvido é capaz de solucionar o PDE. Mesmo em instâncias com uma rede extensa (mais de 600 nós sensores) e topologias complexa o método proposto foi capaz de solucionar o PDE com uma qualidade satisfatória. Isso mostra que a PG em união com a arquitetura desenvolvida neste estudo é promissora no contexto da geração de aplicações para RSSF de forma automatizada.
+
+

@@ -1,0 +1,526 @@
+\section{METODOLOGIA}
+\label{sec:metod}
+
+A presente seção detalha a metodologia utilizada na execução deste estudo. Serão apresentados todos os detalhes do \emph{framework} desenvolvido, contemplando os três módulos que compõem a ferramenta.
+
+
+%%
+%%%%
+%%%%%
+\subsection{Visão Geral do Sistema}
+O \emph{framework} desenvolvido é um sistema que trabalha inserido no contexto de uma RSSF. A \figurename~\ref{fig:nosensor} apresenta uma ilustração esquemática de um nó sensor que trabalha neste sistema. Uma cópia do \emph{middleware} proposto é instalada e executada em todos os nós sensores da RSSF. Este \emph{middleware} possui uma máquina virtual capaz de interpretar \emph{scripts} escritos em uma determinada linguagem. Esses \emph{scripts} são programas que descrevem em alto nível o ciclo de trabalho dos nós sensores da RSSF. Esse ciclo de trabalho pode variar conforme as características individuais de cada nó sensor, como posicionamento geográfico, variáveis do ambiente e variáveis de controle interno do nó sensor.
+
+
+\begin{figure}[!h!b!t]
+ \centering
+ \includegraphics[width=0.75\columnwidth]{img/no_sensor.pdf}
+ % no_sensor.png: 613x564 pixel, 90dpi, 17.30x15.92 cm, bb=0 0 490 451
+ \caption{Ilustração esquemática de uma RSSF executando o sistema proposto.}
+ \label{fig:nosensor}
+\end{figure}
+
+
+O \emph{middleware} deve ser implementado em linguagens de programação específicas para programação de nós sensores. Ele deve prover a máquina virtual que interpreta a linguagem de \emph{script} especificada e deve controlar os aspectos de \emph{hardware} dos nós sensores. Dessa forma, o projetista é abstraído dos aspectos específicos de cada nó sensor e pode se preocupar apenas com os aspectos globais da RSSF, mesmo que a rede seja heterogênea em termos de \emph{hardware} dos nós sensores.
+
+Outro aspecto importante que o \emph{middleware} deve contemplar é a implantação do \emph{script} que controlará a RSSF. O \emph{middleware} precisa ser instalado na RSSF através do acesso físico a cada nó sensor. Porém, é conveniente que o \emph{middleware} possua um recurso para instalação do \emph{script} controlador através da comunicação sem fio da RSSF (\emph{wireless}). Este recurso facilita os testes na RSSF real e economiza tempo na implantação ou atualização do \emph{script} de controle da rede.
+
+Pode-se encontrar na literatura várias abordagens de \emph{middlewares} orientados a agentes móveis para a programação de RSSF, como o \emph{Impala} \cite{liu2003}. Estes \emph{middlewares} fornecem, além de outros recursos, a capacidade de se programar (ou reprogramar) uma RSSF através da comunicação sem fio, sem precisar ter acesso físico aos nós sensores toda a vez que o programa de controle precisa ser atualizado. Dessa forma, o presente estudo tem o foco principal no desenvolvido do \emph{framework} para gerar \emph{scripts} de controle de forma automatizada.
+
+A \figurename~\ref{fig:overview} apresenta uma visão geral do \emph{framework} desenvolvido. O fluxo de funcionamento da ferramenta é dividido em três partes. A primeira parte é definida pelo projetista da RSSF (\figurename~\ref{fig:overview}(a)). Esta etapa deve ser a menor em termos de quantidade de tarefas e custo de tempo, uma vez que o objetivo principal do \emph{framework} é minimizar o trabalho do projetista da rede. Assim, o projetista deve executar uma tarefa apenas: definir a função objetivo (\emph{fitness}). Esta função deve contemplar todos os aspectos que se deseja otimizar durante a geração do \emph{script} de controle, como número de mensagens enviadas durante a execução, tempo de vida da bateria dos nós sensores, entre outros aspectos. A definição desta função objetivo não é uma tarefa trivial, mas uma vez definida, o \emph{framework} será capaz de gerar \emph{scripts} otimizados para qualquer tamanho e topologia conexa de RSSF.
+\vspace*{11pt}
+
+\begin{figure}[!h!t!b]
+ \centering
+ \includegraphics[width=\columnwidth]{img/arquitetura_geral.pdf}
+ % arquitetura_geral.png: 624x243 pixel, 90dpi, 17.61x6.86 cm, bb=0 0 499 194
+ \caption{Visão geral do funcionamento do \emph{framework} desenvolvido.}
+ \label{fig:overview}
+\end{figure}
+
+
+A segunda parte é definida e executada pelo \emph{framework} desenvolvido (\figurename~\ref{fig:overview}(b)). A ferramenta realizará a geração de programas através de um método de Programação Genética (PG). Na PG existe uma população de indivíduos, onde cada indivíduo representa um \emph{script} de controle que o \emph{middleware} é capaz de interpretar e executar. Essa população de \emph{scripts} é evoluída através de operadores genéticos de mutação e recombinação. Cada novo indivíduo gerado pela PG precisa ser avaliado para saber a qualidade do programa de controle. Esse processo de avaliação é realizado através da simulação do funcionamento deste \emph{script} em uma RSSF. Essa simulação é realizada pelo módulo de simulação desenvolvido neste estudo. A simulação fornece estatísticas da execução do \emph{script} para a função objetivo. Assim, a função objetivo fornece um valor que representa a qualidade deste \emph{script} em atender aquele objetivo. Este valor é utilizado como a aptidão (\emph{fitness}) do indivíduo que representa esse \emph{script}.
+
+É importante observar que a avaliação dos \emph{scripts} gerados não pode ser feita executando estes programas em uma RSSF real, uma vez que isso demandaria muito tempo de execução e a avaliação é uma tarefa que é executada intensivamente durante o processo de geração do programa. Por isso, a necessidade do desenvolvimento de um módulo de simulação especializado que seja rápido, porém que contemple os aspectos funcionais e não funcionais da RSSF em questão.
+
+A PG gera novas populações de indivíduos baseada no \emph{fitness} da população atual, buscando evoluir os programas para soluções melhores, ou seja, que atendam melhor o objetivo definido pelo projetista. Quando um determinado critério de parada é atendido (esse critério é configurável), o \emph{script} representado pelo indivíduo com o melhor valor de \emph{fitness} é fornecido para o projetista. Esse \emph{script} é o programa controlador da RSSF que realiza a tarefa descrita pela função objetivo.
+
+Em seguida, na terceira parte, já com a solução final em mãos, o projetista deve implantar (\emph{deployment}) esse \emph{script} na RSSF em que o \emph{middleware} está instalado (\figurename~\ref{fig:overview}(c)). Essa implantação é feita através da comunicação sem fio e consiste basicamente em copiar o \emph{script} fornecido para todos os nós sensores da RSSF. Após o processo de implantação a RSSF já estará executando a tarefa definida pelo projetista através da função objetivo.
+
+As seções a seguir detalharão cada aspecto do processo de geração automatizada de aplicações para RSSF. Neste estudo o \emph{framework} foi aplicado para o problema de detecção de eventos utilizando RSSF. Dessa forma uma função objetivo para avaliar uma solução para este problema também será apresentada.
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Problema de Detecção de Eventos (PDE)}
+O problema de detecção de eventos (PDE) visa comunicar ao nó concentrador de informações (nó \emph{sink}) a ocorrência de um determinado evento em alguma região da RSSF. Este nó concentrador de informação normalmente é uma central de monitoramento de uma região. Essa central recebe informações da RSSF e precisa ser notificada caso o evento sob monitoramento seja detectado.
+
+Neste tipo de problema as RSSF têm algumas características comuns, por exemplo:
+
+\begin{itemize}
+\setlength{\itemsep}{-0.3ex}
+\item A rede fica ``parada'' (sem enviar informações entre os nós) realizando medições periódicas no ambiente.
+\item Quando um determinado comportamento do ambiente é detectado, um evento ocorre.
+\item A detecção do evento gera uma mensagem que deve ser enviada até o nó \emph{sink} comunicando a ocorrência do evento.
+\end{itemize}
+
+Este é o comportamento padrão de uma aplicação que visa solucionar um problema de detecção de eventos através de RSSF.
+Existem vários problemas reais que seguem esse padrão de comportamento de problemas de detecção de eventos. A detecção de incêndios é um problema clássico desse tipo. Uma rede de sensores é espalhada por uma região, esses sensores fazem medições constantes de temperatura e pressão de seus arredores. Quando a temperatura e a pressão chegam em valores determinados, é disparado um evento que indica que provavelmente está ocorrendo um incêndio naquela área. Essa informação deve ser encaminhada na RSSF até o nó \emph{sink}, que pode ser um computador e/ou uma central de monitoramento na região.
+
+\begin{figure}[!b]
+ \centering
+\vspace*{11pt}
+
+ \includegraphics[width=\columnwidth]{img/pde.pdf}
+ \caption{Exemplo de RSSF em uma aplicação do PDE (detecção de incêndios).}
+ \label{fig:pde}
+\end{figure}
+
+Neste estudo o problema de detecção de eventos será tratado de forma genérica. Quando um evento é detectado, o \emph{middleware} registra essa informação (um alarme) na memória dos nós sensores. Essa memória pode ser lida pelo \emph{script} de controle que está sendo executado na RSSF, permitindo que ações sejam realizadas mediante à detecção de um evento. Dessa forma, a solução obtida pelo \emph{framework} é aplicável a qualquer tipo de PDE, até mesmo para uma rede que precise monitorar mais de um evento simultaneamente. A \figurename~\ref{fig:pde} apresenta um exemplo de RSSF tratando um evento detectado.
+
+
+
+%
+%
+%%%% FUNÇÃO DE FITNESS
+
+%
+%
+%%%% FUNÇÃO DE FITNESS
+\subsection{Função Objetivo para o PDE}
+\label{sec:fitness}
+A função objetivo (ou função de avaliação) calcula a qualidade de uma determinada solução (\emph{script}) gerada pela PG. Essa qualidade representa a eficiência com que o \emph{script} de controle soluciona um problema determinado. Essa eficiência é representada por um valor real positivo. A função objetivo é descrita como uma minimização, portanto valores menores representam uma qualidade maior do programa avaliado. Neste estudo foi desenvolvida uma função objetivo que representa o PDE. Essa função objetivo foi utilizada para avaliar a capacidade do \emph{framework} de gerar aplicações (\emph{scripts} de controle) capazes de solucionar com eficiência satisfatória este problema.
+
+Uma das principais características do \emph{framework} desenvolvido é que o projetista da RSSF necessita definir apenas uma função objetivo que descreva bem o objetivo final da rede. Essa função objetivo será utilizada pela PG como a função de avaliação (função de \emph{fitness}) do algoritmo evolutivo. Devido à isso, a chave para se obter boas soluções através deste \emph{framework} é uma função objetivo bem definida.
+
+A função objetivo baseia-se em dados (estatísticas) obtidas através da simulação de um \emph{script} gerado pela PG. Além destes dados, alguns parâmetros devem ser definidos para balancear o peso de cada característica da rede. Estes dados e parâmetros são formalizados na \tablename~\ref{tb:fitparams} e na \tablename~\ref{tb:fitdata}:
+\vspace*{2pt}
+
+\begin{table}[!h!t!bp]
+\centering
+\caption{Parâmetros da função objetivo.}
+\fbox{\begin{minipage}{0.98\columnwidth}
+\begin{itemize}[leftmargin=8ex,rightmargin=1ex,labelsep=2ex,itemsep=0ex,parsep=0ex]
+\item[$C_{el}$] Custo de eventos que não forem entregues ao \emph{sink}.
+\item[$C_{ms}$] Custo do envio de mensagens.
+\item[$C_{pm}$] Custo do envio prematuro de mensagens.
+\item[$C_{pa}$] Custo de ações prematuras.
+\item[$C_{mwd}$] Custo de mensagens enviadas para direção incorreta.
+\item[$C_{ed}$] Custo da distância mínima entre a mensagem e o \emph{sink}.
+\end{itemize}
+\end{minipage}}
+\label{tb:fitparams}
+\end{table}
+
+
+\begin{table}[!h!t!bp]
+\centering
+\caption{Dados de simulação utilizados pela função objetivo.}
+\fbox{\begin{minipage}{0.98\columnwidth}
+\begin{itemize}[leftmargin=9ex,rightmargin=1ex,labelsep=2ex,itemsep=0ex,parsep=0ex]
+\item[$PS$] Tamanho do \emph{script} gerado.
+\item[$EL$] Número de eventos que não foram comunicados ao \emph{sink}.
+\item[$PM$] Número de mensagens enviadas antes que algum evento ocorra.
+\item[$PA$] Número de ações executadas antes que um evento seja detectado.
+\item[$MWD$] Número de mensagens enviadas para a direção contrária do \emph{sink}.
+\item[$ED$] Distância mínima entre a mensagem comunicando o evento do nó \emph{sink}.
+\item[$MS$] Número total de mensagens enviadas durante a simulação.
+\end{itemize}
+\end{minipage}}
+\label{tb:fitdata}
+\end{table}
+
+
+Considerando estes parâmetros e dados de simulação, a função objetivo é definida a seguir na Equação~\ref{eq:obj}.
+
+
+\begin{equation}
+\begin{array}{r l}
+ Min\ F(\cdots) = & C_{ms}\cdot MS + C_{el}\cdot EL  + C_{pa}\cdot PA + C_{pm}\cdot PM\\
+                + & PS + C_{ed}\cdot (ED)^2 + C_{mwd}\cdot MWD\cdot EL\\
+\end{array}
+\label{eq:obj}
+\end{equation}
+\vspace*{11pt}
+
+Esta função objetivo define basicamente 2 requisitos. Primeiramente, entregar a mensagem da ocorrência de um evento ao nó \emph{sink}, que é o requisito que diz se o PDE foi solucionado ou não por um programa. O segundo requisito é realizar essa entrega com um número mínimo de mensagens enviadas pela RSSF. O rádio de comunicação sem fio é um dos recursos que mais gastam energia em um nó sensor. Como a energia é um recurso limitado na maioria das RSSF, minimizar o número de mensagens enviadas significa prolongar o tempo de vida da RSSF. Outro aspecto é que, em algumas vezes, menor número de mensagens enviadas significa um menor intervalo entre a detecção do evento e a entrega da mensagem ao nó \emph{sink}.
+
+Dados estes requisitos, o problema é definido sem nenhuma restrição formal. Dessa forma, todas as soluções obtidas são factíveis em termos de modelagem do problema (algumas podem ser infactíveis no mundo real). Em detrimento de restrições formais, as violações ao comportamento desejado são penalizadas na função objetivo. Este tipo de tratamento das violações é melhor para PG, uma vez que o algoritmo evolutivo não precisa tratar e gerenciar indivíduos infactíveis. Outra vantagem é que o espaço de possíveis soluções se torna mais homogêneo sem soluções infactíveis. Uma desvantagem porém é que este espaço de busca se torna maior devido à falta de restrições formais.
+
+Quando um evento é detectado por um nó sensor, este deve encaminhar uma mensagem para o nó \emph{sink} comunicando a ocorrência deste evento. Quando a mensagem de evento detectado não consegue chegar até o nó \emph{sink} a contagem $EL$ é incrementada. Esta contagem é penalizada na função objetivo pois é uma violação direta aos requisitos do problema tratado ($C_{el}\cdot EL$).
+
+Outra penalidade que é considerada é quando um nó sensor realiza alguma ação antes que o evento que está sendo monitorado tenha ocorrido. Por exemplo, o nó sensor pode começar a escrever na memória baseado em uma \emph{trigger} (uma condição) inconsistente. Estas ações consomem energia do nó sensor, o que é uma das características que se deseja otimizar durante o funcionamento de uma RSSF. Essas ações realizadas prematuramente normalmente são inúteis e não contribuem para solução do problema. Dessa forma, cada mensagem enviada antes da ocorrência do evento é penalizada em $C_{pm}\cdot PM$. Já as ações (que não sejam envio de mensagens) realizadas prematuramente são penalizadas em $C_{pa}\cdot PA$.
+
+Um comportamento desejável da rede é que a cada mensagem enviada por um nó sensor, esta mensagem fique mais próxima do nó \emph{sink}. Por isso cada vez que uma mensagem é enviada na direção oposta à direção do \emph{sink} uma penalização é adicionada ao valor de \emph{fitness}. Esta penalização é adicionada em $C_{mwd}\cdot MWD\cdot EL$. A penalização é multiplicada pela contagem de eventos não entregas ao \emph{sink}, pois em alguns casos, é necessário que algumas mensagens sejam enviadas na direção oposta ao \emph{sink} para que ela possa ser entregue à ele (redes esparsas). Neste caso, se a RSSF é capaz de entregar todas as mensagens de eventos ao nó \emph{sink}, esta penalização é ignorada.
+
+Uma penalização muito importante incluída na função objetivo é aquele que penaliza a distância mínima entre o último nó sensor avisado da ocorrência do evento e o nó \emph{sink}. Esta componente da função objetivo trata do requisito principal do PDE, a entrega da mensagem comunicando a ocorrência do evento ao nó \emph{sink}. Esta penalização é tratada em $C_{ed}\cdot (ED)^2$. Quando o evento é comunicado com sucesso ao nó \emph{sink}, essa distância mínima ($ED$) é zero e portanto não há penalizações no \emph{fitness}. Uma característica importante obtida através desta penalização é a diferenciação de um \emph{script} que consegue levar a mensagem para mais próximo do \emph{sink} do que um outro \emph{script}. Essa diferenciação ajuda o algoritmo evolutivo da PG à guiar melhor a evolução da população de \emph{scripts}.
+
+Por último, são adicionadas duas penalizações que não contemplam aspectos funcionais da RSSF, mas sim eficiência na solução do PDE. A primeira é o tamanho total do programa (\emph{script}) gerado ($PS$). A segunda penalização é aplicada sobre o número total de mensagens enviadas pela RSSF durante toda a simulação. Essa componente da função objetivo visa minimizar a quantidade de mensagens enviadas, economizando energia das baterias dos nós sensores. Essa penalização é adicionada em $C_{ms}\cdot MS$.
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Módulo de Simulação de RSSF}
+\label{sec:sim}
+Simular uma RSSF por completo é uma tarefa complexa e que contempla diversos aspectos físicos do ambiente, além de características de hardware e software dos nós sensores (pilhas de protocolos, sinal de comunicação sem fio, entre outros). Devido à necessidade de realizar simulações de forma muito intensiva, foi implementado um módulo de simulação de RSSF que não contempla a maior parte dos aspectos de uma rede real e simplifica vários outros aspectos.
+
+Além da simulação da RSSF, foi necessário implementar uma versão simulada do \emph{middleware} proposto. Essa implementação do \emph{middleware} provê para a simulação todas as funcionalidades que o \emph{middleware} em um nó sensor real deve prover.
+
+A \figurename~\ref{fig:simparams} apresenta um conjunto de informações que o simulador necessita para realizar simulações de programas gerados pela PG. O simulador foi desenvolvido de forma que ele seja capaz de realizar simulações do PDE com RSSF da forma mais eficiente possível. Esse conjunto de parâmetros que o simulador necessita compõe uma instância de testes no contexto deste estudo. De maneira geral, a função do simulador de RSSF é avaliar a qualidade de um programa gerado pela PG quando executado no contexto de uma instância de teste.
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\fbox{\begin{minipage}{0.98\columnwidth}
+\begin{description}[align=left,leftmargin=2ex,style=nextline,labelsep=4ex]
+%\setlength{\itemsep}{1ex}
+\item[$simulationMaxTime$] Duração da simulação que será realizada (em unidades virtuais de tempo).
+\item[$nodesSleepCycle$] Intervalo de tempo entre as execuções do programa em cada nó sensor.
+\item[$numberOfNodes$] Número de nós sensores na rede.
+\item[$sinkNode$] ID do nó \emph{sink}.
+\item[$eventTriggers$] Lista com o ID de cada nó sensor que detectará um evento durante a simulação. Contém também o instante virtual em que cada evento ocorrerá.
+\item[$sensorNodes$] Lista com a configuração de cada nó sensor. Os nós possuem uma posição geográfica (coordenadas), alcance do rádio de comunicação (em metros) e o tamanho de sua memória (ativa e passiva, veja a seção \ref{sec:middleware}).
+\end{description}
+\end{minipage}}
+\caption{Conjunto de parâmetros do simulador de RSSF que compõe uma instância de testes.}
+\label{fig:simparams}
+\end{figure}
+
+O simulador implementado é executado através de passos (laços de repetição), onde cada iteração deste laço de execução representa uma unidade de tempo virtual. A duração da simulação é definida pelo parâmetro $simulationMaxTime$. Em cada iteração deste laço de repetição será verificado se algum evento contido na lista $eventTriggers$ necessita ser disparado. Caso o tempo de ocorrência de algum evento tenha sido alcançado, um comando é disparado para a implementação simulada do \emph{middleware} do nó sensor específico. O \emph{middleware} então se encarrega de tratar a detecção deste evento. O funcionamento do \emph{middleware} será melhor detalhado na seção \ref{sec:middleware} a seguir.
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\fbox{\begin{minipage}{0.98\textwidth}
+\begin{algorithm}[H]
+\KwData{$script$}
+\Begin{
+	$middleware\leftarrow$ Implementação simulada.\;
+	\For{$node\in sensorNodes$}{
+		$node$.instalaMiddleware($middleware$)\;
+		$node$.$middleware$.implantaScript($script$)\;
+		$node$.$middleware$.inicializa()\;
+	}
+	\For{$currentTime \leftarrow 1$ até $simulationMaxTime$}{
+		\For{$event\in eventTriggers$}{
+			\If{$event$.ocorreu($currentTime$)}{
+				$sensorNodes$.disparaEvento($event$)\;
+				$eventTriggers$.removeEvento($event$)\;
+			}
+		}
+		\For{$node\in sensorNodes$}{
+			$node$.$middleware$.executaScript()\;
+		}
+	}
+}
+\end{algorithm}
+\end{minipage}}
+\caption{Pseudocódigo da execução do simulador.}
+\label{fig:simalg}
+\end{figure}
+
+
+Após a verificação e a ativação dos eventos detectados, o simulador dispara um comando de execução do \emph{script} de controle para o \emph{middleware} em cada nó sensor da rede. O \emph{middleware} verifica se a memória do nó sensor foi alterada desde o último comando de execução do \emph{script} de controle. Caso tenha havido alterações na memória, o \emph{script} de controle é executado pela máquina virtual. Caso contrário a execução do \emph{script} não é realizada nesta iteração da simulação.
+
+A \figurename~\ref{fig:simalg} apresenta um pseudocódigo da execução básica do simulador para um programa gerado pela PG. Durante a execução da simulação dados estatísticos da simulação são armazenados e repassados para a função objetivo, que por sua vez realiza o cálculo de \emph{fitness} do \emph{script} simulado. Os dados coletados durante a simulação são formalizados na seção~\ref{sec:fitness}, na \tablename~\ref{tb:fitdata}.
+
+A implementação do simulador e da versão simulada do \emph{middleware} é bem mais complexa do que a parte retratada na \figurename~\ref{fig:simalg}. Entretanto, esses detalhes não serão especificados pois muitos deles são detalhes de implementação.
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Arquitetura Geral do \emph{Middleware}}
+\label{sec:middleware}
+O \emph{middleware} atua como um sistema intermediário entre a estrutura do nó sensor sem fio e o código \emph{script} gerado pela PG. Ele atua como um pequeno sistema operacional que gerencia os recursos do nó sensor, fornece acesso a serviços e funcionalidades pré-programadas. Além disso ele controla como é interpretada a representação do indivíduo gerada pela PG. O \emph{middleware} proposto consiste em uma interface pré-definida que determina quais funcionalidades ele deve prover. A implementação real pode ser feita diretamente para o microcontrolador do nó sensor ou como uma aplicação para um sistema operacional específico para nós sensores (como o TinyOS). 
+
+ A \figurename~\ref{fig:middleware} apresenta uma ilustração esquemática da arquitetura geral do \emph{middleware}. Nela são representados diversos componentes que compõem o \emph{middleware} e algumas das interações entre eles. Também estão representados alguns componentes do nó sensor que o \emph{middleware} pode fazer uso.
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\includegraphics[width=0.95\textwidth]{img/Middleware.pdf}
+\caption{Arquitetura geral do \emph{middleware} desenvolvido.}
+\label{fig:middleware}
+\end{figure}
+
+O nó sensor possui diversos sensores, como sensores de temperatura, pressão, umidade e até mesmo podem estar equipados com um sistema de GPS (\figurename,~\ref{fig:middleware}(1)). Estes sensores e sistemas de sensoriamento são acessados pelo \emph{middleware} com o intuito de prover funcionalidades pré programadas para o \emph{script} de controle (\figurename,~\ref{fig:middleware}(2)). Essas funcionalidades podem ser a detecção de incêndios baseada nas leituras de sensores de temperatura e pressão, a detecção de intrusos baseada na leitura de um sensor de movimento ou então o posicionamento geográfico obtido da leitura de um GPS.
+
+Apesar destas funcionalidades serem utilizadas pelo \emph{script} de controle, este não tem acesso direto à estes blocos de código pré programados. A interação do \emph{script} de controle com essas funcionalidades é através da memória ativa do \emph{middleware}, que também possui uma memória passiva (\figurename, \ref{fig:middleware}(3)). As funcionalidades pré programadas escrevem dados na memória ativa que podem ser lidos posteriormente pelo \emph{script} de controle. Esses dados podem ser a posição geográfica do nó \emph{sink}, a posição do intruso detectado, um valor booleano dizendo se um incêndio está ocorrendo ou não, entre outros. O \emph{script} tem acesso ``somente leitura'' à memória ativa e não pode alterar os valores nela armazenados. A memória passiva do \emph{middleware} tem um objetivo diferente e é uma forma que o \emph{script} de controle tem para armazenar informações internas de controle e enviar e receber mensagens dos nó vizinhos. Na memória passiva o \emph{script} pode ler e escrever dados sem restrições.
+
+O \emph{script} de controle fica armazenado dentro do \emph{middleware} (\figurename,~\ref{fig:middleware}(4)) e é interpretado pela máquina virtual (MV) que também faz parte do \emph{middleware} (\figurename,~\ref{fig:middleware}(5)). Quando um comando de envio de mensagem para um nó vizinho é executado, esse comando é repassado para o controle de envio e recebimento de mensagens do \emph{middleware} (\figurename,~\ref{fig:middleware}(6)). O controle envia a mensagem para o nó sensor de destino através do rádio de comunicação sem fio do nó sensor (\figurename,~\ref{fig:middleware}(7)). Quando este recebe a mensagem, os dados recebidos na mensagem são escritos na memória passiva do nó de destino. Esses dados podem ser lidos e utilizados pelo \emph{script} de controle posteriormente.
+
+O envio e recebimento de mensagens realizados pelo \emph{script} de controle é basicamente uma escrita de dados na memória passiva de um nó sensor vizinho. Dessa forma, a comunicação entre dois nós sensores da rede é transparente para o \emph{script} de controle, simplificando o código de controle.
+
+O objetivo final é que todos os nós sensores da RSSF possuam o \emph{middleware} instalado executando o mesmo \emph{script} de controle, porém o estado (valores armazenados) de suas memórias ativa e passiva modifiquem o comportamento de cada nó. Neste estudo não foi realizada uma implementação do \emph{middleware} para um nó sensor real, foi realizada apenas uma versão simulada em software para que experimentos computacionais pudessem ser realizados.
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Linguagem \emph{Script} do \emph{Middleware}}
+\label{sec:script}
+O \emph{middleware} proposto possui uma máquina virtual (MV) que é capaz de interpretar \emph{scripts} descritos em uma linguagem específica. Esta linguagem é composta basicamente de uma estrutura condicional (chamada de \emph{trigger}) e comandos imperativos pré programados na implementação da MV. Neste estudo a linguagem foi desenvolvida de forma que os \emph{scripts} de controle possuam um expressividade suficiente para solucionar o PDE. A \tablename~\ref{tb:scripts} apresenta as estruturas existentes na linguagem proposta.
+
+
+\begin{table}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\caption{Estruturas existentes na linguagem proposta.}
+\begin{tabularx}{\textwidth}{l l X}
+\hline
+Estrutura & Exemplo & Descrição\\
+\hline
+\emph{trigger} & if($ev1$ $op$ $ev2$) & Estrutura condicional composta de dois operandos e um operador.\\
+\emph{send command} & send($ev$,$dest$) & Envia um dado para um nó vizinho.\\
+\emph{up event command} & up($ev$) & Guarda o valor $true$ em um evento.\\
+\emph{down event command} & down($ev$) & Guarda o valor $false$ em um evento.\\
+\hline
+\end{tabularx}
+\label{tb:scripts}
+\end{table}
+
+
+As \emph{triggers} são ``gatilhos'' que são utilizados como estruturas para condicionar a execução de um conjunto de comandos. Como apresentado na \tablename~\ref{tb:scripts}, uma \emph{trigger} é composta por dois eventos ($ev1$ e $ev2$) e um operador ($op$). Os eventos, no contexto do \emph{script} de controle, são posições na memória do \emph{middleware} (memória ativa ou passiva, veja a seção~\ref{sec:middleware}). Essas posições de memória são chamadas de eventos pois só guardam valores booleanos (verdadeiro ou falso). Dessa forma, um evento está inativo quando está com o valor falso e está ativo quando está com o valor verdadeiro. Na prática, ativar um evento significa mudar o valor em sua posição de memória para verdadeiro. O operador de uma \emph{trigger} pode ser o operador lógico ``E'' ($and$) ou o ooperador lógico ``OU'' ($or$).
+
+O comando de envio de mensagens ($send command$) possui dois parâmetros, um evento ($ev$) e um destinatário ($dest$). Ele consiste basicamente em ativar um evento (escrever o valor ``verdadeiro'' em uma posição da memória) na memória de um nó sensor vizinho. O nó sensor vizinho é definido pelo parâmetro $dest$, que na verdade é uma direção na qual o nó vizinho se encontra. Essa direção pode ser norte, sul, leste ou oeste ($up$, $down$, $right$ e $left$). O \emph{middleware} processa essa direção e envia a mensagem para o nó sensor vizinho mais próximo naquela direção. Ao receber a mensagem o \emph{middleware} do nó vizinho ativa o evento especificado na mensagem.
+
+Os outros dois comandos existentes na linguagem são o comando de $up event$ e $down event$. Esses comandos ativam e desativam, respectivamente, um determinado evento ($ev$) na memória passiva do \emph{middleware}.
+
+A \figurename~\ref{fig:script} apresenta um exemplo completo de \emph{script} de controle que pode ser executado pela MV do \emph{middleware} proposto. Os \emph{scripts} são executados na ordem em que os comandos aparecem, por isso a ordem em que as \emph{triggers} são organizadas influenciam no fluxo de execução dos comandos. Uma observação importante é que o \emph{script} de controle, após executado, só é executado novamente se alguma alteração na memória houver ocorrido na última execução. Caso nenhuma alteração tenha sido feita, o \emph{script} só executará novamente quando algum evento ativo seja alterado ou caso o nó sensor receba uma mensagem de algum vizinho ativando um evento passivo.
+
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\fbox{\begin{minipage}{0.98\textwidth}
+\begin{algorithm}[H]
+\If{A1 and A2}{
+	up(P2)\;
+	down(P3)\;
+	send(P3, $up$)\;
+	down(P1)\;
+}
+\If{P1 or A2}{
+	donw(P1)\;
+	send(P2, $right$)\;
+}
+\If{P3 and P2}{
+	up(P2)\;
+	down(P1)\;
+	send(P1, $down$)\;
+}
+\end{algorithm}
+\end{minipage}}
+\caption{Exemplo de \emph{script} de controle que pode ser interpretado pela MV do \emph{middleware} proposto.}
+\label{fig:script}
+\end{figure}
+
+
+No exemplo da \figurename~\ref{fig:script}, a \emph{trigger} na linha 1 verifica se os eventos da memória ativa na posição 1 (A1) e na posição 2 (A2) estão ativos. Caso essa condição seja satisfeita, os comandos na linha 2 a 5 serão executados sequencialmente. Primeiramente o evento passivo na posição 2 (P2) será ativado e o evento passivo na posição 3 (P3) será desativado. Em seguida o evento passivo na posição 3 do nó vizinho ao norte ($up$) será ativado através de uma mensagem. Por fim o evento passivo na posição 1 (P1) é desativado. Na sequência da execução, a MV avalia as outras \emph{triggers} e executa os comandos daquelas cuja a sua condição seja satisfeita.
+
+O \emph{framework} desenvolvido tem o objetivo de obter um \emph{script} descrito nesta linguagem para que possa ser executado em uma RSSF com o \emph{middleware} instalado. Apesar da linguagem ter sido desenvolvida com o intuito de facilitar a geração automática de código, o projetista da RSSF pode escolher escrever um \emph{script} manualmente, ou até mesmo alterar o \emph{script} encontrado pelo \emph{framework}.
+
+
+
+%%
+%%%%
+%%%%%%%
+\subsection{Programação Genética}
+\label{sec:method}
+
+O \emph{framework} desenvolvido possui um módulo responsável pela realização da Programação Genética (PG), que realiza a geração automatizada de código fonte apoiada nos outros módulos que compõem a ferramenta. Este módulo foi implementado de uma forma que ele seja facilmente estendido. Um usuário do \emph{framework} pode criar de maneira simples novos algoritmos evolutivos para realizar o processo de PG. Os operadores genéticos utilizados pelos algoritmos evolutivos também podem ser facilmente customizados e estendidos.
+
+Nesta seção o módulo de PG será descrito de forma detalhada contemplando o algoritmo evolutivo utilizado nos experimentos deste estudo.
+
+
+%%
+%%%%
+%%%%%%
+\subsubsection{Representação do Indivíduo}
+Um indivíduo na PG representa um programa, neste caso um \emph{script} de controle que pode ser executado pelo \emph{middleware} proposto. A representação desses \emph{scripts} nos indivíduos da PG foi feita utilizando-se diretamente a estrutura da versão simulada do \emph{middleware}.
+
+Cada indivíduo carrega um programa que é representado por uma lista de \emph{triggers}. Cada \emph{trigger} possui um cabeçalho e uma lista de comandos. O cabeçalho de uma \emph{trigger} representa a condição para que a lista de comandos seja executada. A \figurename~\ref{fig:individuo} apresenta uma ilustração da representação do individuo que foi utilizada. Esta é a representação do \emph{script} apresentado na \figurename~\ref{fig:script}.
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\includegraphics[width=0.65\textwidth]{img/ExemploIndividuo.pdf}
+\caption{Exemplo de representação (codificação genética) do indivíduo da PG.}
+\label{fig:individuo}
+\end{figure}
+
+A representação não possui uma estrutura diferente do \emph{script} na linguagem desenvolvida, por isso ela pode ser lida diretamente pela versão simulada do \emph{middleware}, sem a necessidade de realizar processos de codificação/decodificação.
+
+
+%
+%
+%%%%%
+%%%%%
+\subsubsection{Operadores Genéticos}
+\label{sec:operators}
+Nessa seção, uma descrição dos operadores genéticos responsáveis pela geração de novos indivíduos durante a evolução da PG.
+
+%%
+%%%%
+%%%%%%
+\paragraph{Recombinação}
+
+Os operadores de recombinação propostos visam permitir uma troca efetiva de informações entre os indivíduos pais na geração de um indivíduo filho. São considerados os diversos \emph{triggers} e comandos que compõem a representação de cada indivíduo. Foram criados um total de quatro operadores de recombinação, dois deles baseados em recombinação de um ponto e outros dois baseados em recombinação uniforme.
+
+O primeiro operador de recombinação é a recombinação de um ponto em \emph{trigger} e é ilustrado na \figurename~\ref{fig:crossover1pTrigger}. Um novo indivíduo é criado a partir de dois indivíduos já existentes utilizando uma recombinação de um ponto no nível das \emph{triggers} do programa. A linha tracejada indica o ponto de corte. O novo indivíduo herda todos os \emph{triggers} do primeiro pai até o ponto de corte e todos os \emph{triggers} do segundo pai após o ponto de corte. O ponto de corte é sorteado aleatoriamente baseado no pai que possui menos \emph{triggers}.
+ 
+\begin{figure}[!htb]
+\centering
+\vspace*{11pt}
+
+\includegraphics[width=0.95\textwidth]{img/cross-onepoint-trigger.pdf}
+\caption{Operador de recombinação de um ponto em \textit{trigger}.}
+\label{fig:crossover1pTrigger}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\vspace*{11pt}
+
+\includegraphics[width=0.95\textwidth]{img/cross-onepoint-command.pdf}
+\caption{Operador de recombinação de um ponto em comando.}
+\label{fig:crossover1pComando}
+\end{figure}
+
+A recombinação de um ponto em comando ocorre dentro de cada $trigger$ conforme exemplificado na Figura \ref{fig:crossover1pComando}.
+Inicialmente é selecionado um ponto de corte para cada lista de comandos em todos os $triggers$. Um novo indivíduo é criado pela lista de comandos até o ponto de corte do primeiro pai mais a lista de comandos após o ponto de corte do segundo pai. Listas de tamanho diferentes terão um ponto de corte que ocorra em ambas. A escolha de qual cabeçalho será utilizado para compor a \emph{trigger} do novo indivíduo é feita aleatoriamente entre os dois pais, a probabilidade é de 50\% para cada pai.
+
+\begin{figure}[!htb]
+\centering
+\vspace*{11pt}
+
+\includegraphics[width=0.95\textwidth]{img/cross-uniform-trigger.pdf}
+\caption{Operador de recombinação uniforme em \textit{trigger}.}
+\label{fig:crossoverUniTrigger}
+\end{figure}
+
+
+A \figurename~\ref{fig:crossoverUniTrigger} ilustra o terceiro operador de recombinação, a recombinação uniforme por \emph{trigger}. Nesta recombinação cada \emph{trigger} dos pais é escolhida aleatoriamente entre os dois. Existe um probabilidade de 50\% de escolher uma \emph{trigger} de um dos pais. Caso um pai possua mais \emph{triggers} do que o outro, cada \emph{trigger} excedente terá uma probablidade de 50\% de ser incluída ou não no indivíduo filho.
+
+
+\begin{figure}[!htb]
+\centering
+\vspace*{11pt}
+
+\includegraphics[width=0.95\textwidth]{img/cross-uniform-command.pdf}
+\caption{Operador de recombinação uniforme em comando.}
+\label{fig:crossoverUniCommand}
+\end{figure}
+
+Por último, a \figurename~\ref{fig:crossoverUniCommand} apresenta um exemplo da recombinação uniforme por comando. Este operador funciona de forma semelhante à recombinação de um ponto por comando. Para cada lista de comandos dos pais, um cabeçalho é sorteado com 50\% de probabilidade para cada pai. Em seguida, para cada comando existente nos pais, uma probabilidade de 50\% é dada a cada um deles e apenas o comendo de um deles é transferido para o indivíduo filho. Assim como na recombinação uniforme por \emph{trigger}, se um pai possui mais comandos do que o outro, cada comando excedente tem 50\% de probabilidade de ser incluído no indivíduo filho.
+
+
+%%
+%%%%
+%%%%%%
+\paragraph{Mutação}
+
+\begin{table}[!h!b]
+\centering
+\vspace*{11pt}
+
+\caption{Operadores genéticos de mutação utilizados pela PG.}
+\begin{tabularx}{\textwidth}{|l X|}
+\hline\hline
+Operador: & Descrição:\\
+\hline\hline
+Substituir comando: & Sorteia um comando de forma aleatória e troca este por outro comando gerado também aleatoriamente.\\ \hline
+Reiniciar comandos: & Faz o mesmo que ``Substituir comando'', porém ele substitui todos os comandos de um \emph{trigger} escolhido aleatoriamente.\\ \hline
+Remover e inserir: & Sorteia um comando em um $trigger$ aleatório, remove o comando deste \emph{trigger} e o insere em uma posição aleatória em outro $trigger$.\\ \hline
+Trocar comandos: & Sorteia dois comandos dentro de um \emph{trigger} aleatório e troca os dois de posição na lista de comandos deste \emph{trigger}.\\ \hline
+Alterar comando: & Sorteia um comando e modifica os parâmetros do mesmo, como eventos e destinos.\\ \hline
+Trocar $triggers$: & Troca a ordem de dois $triggers$ sorteados aleatoriamente na lista de \emph{triggers} de um indivíduo.\\ \hline
+Alterar cabeçalho: & Modifica os parâmetros do cabeçalho de um $trigger$ sorteado aleatoriamente, alterando os operadores e operandos.\\ \hline
+\hline
+\end{tabularx}
+\label{tb:mutation}
+\end{table}
+
+Além de operadores de recombinação, operadores de mutação são utilizados para a exploração de novas áreas do espaço de soluções. Operadores genéticos de mutação são aplicados aos indivíduos gerados pela recombinação com o intuito de criar novos ``genes'' nos indivíduos. Os operadores de recombinação exploram o rearranjo dos genes já existentes dentro da população de indivíduos. Para se criar novos genes são necessários os operadores de mutação. Foram criados um total de sete operadores de mutação para realizar esta tarefa. A \tablename~\ref{tb:mutation} apresenta e explica estes sete operadores de mutação.
+
+
+
+%
+%
+%%%%
+%%%%%%%%
+\subsubsection{Algoritmo Evolutivo}
+O algoritmo evolutivo utilizado para realizar a PG é ilustrado por meio de um pseudocódigo na \figurename~\ref{fig:AG}. Este algoritmo evolutivo é baseado em um AG clássico com utilização de elitismo.
+
+
+\begin{figure}[!h!t!b]
+\centering
+\vspace*{11pt}
+
+\fbox{\begin{minipage}{0.98\textwidth}
+\begin{algorithm}[H]
+\Begin{
+	inicializar($populacao$)\;
+	simularEAvaliar($populacao$)\;
+	$geracaoAtual\leftarrow 1$\;
+	\While{$geracaoAtual \leq numeroDeGeracoes$}{
+		$populacaoIntermediaria\leftarrow \oslash$\;
+		inserir(melhorIndividuo($populacao$), $populacaoIntermediaria$)\;
+		\For{$i\leftarrow 2$ \KwTo $numeroDeIndividuos$}{
+			($pai1$, $pai2$) $\leftarrow$ torneio($populacao$)\;
+			\If{probabilidade($taxaDeRecombinacao$)}{
+				$filho\leftarrow$ recombinacao($pai1$, $pai2$)\;
+			}
+			\Else{
+				$filho\leftarrow$ copiar(melhor($pai1$,$pai2$))\;
+			}
+			\If{probabilidade($taxaDeMutacao$)}{
+				$filho \leftarrow$ mutacao($filho$)\;
+			}
+			inserir($filho$, $populacaoIntermediaria$)\;
+ 		}
+ 		simularEAvaliar($populacaoIntermediaria$)\;
+ 		$populacao\leftarrow populacaoIntermediaria$\;
+ 		$geracaoAtual\leftarrow geracaoAtual + 1$\;
+	}
+	\Return{melhorIndividuo($populacao$)}
+}
+\end{algorithm}
+\end{minipage}}
+\caption{Pseudocódigo do algoritmo evolutivo utilizado na PG.}
+\label{fig:AG}
+\end{figure}
+
+Primeiramente, todos os indivíduos de uma população são inicializados (linha 2). Cada indivíduo é preenchido com uma lista de \emph{triggers} gerada aleatoriamente. Em seguida todos estes indivíduos são simulados e avaliados (linha 3), sendo atribuído um valor de \emph{fitness} à cada um deles. A simulação de cada indivíduo é feita utilizando o módulo de simulação desenvolvido (seção~\ref{sec:sim}) e o valor de \emph{fitness} é calculado através da função objetivo proposta (seção~\ref{sec:fitness}).
+
+O contador de número de gerações é inicializado como a primeira geração da população (linha 4). Em seguida, o laço de evolução da população é iniciado (linha 5). A evolução da população será repetida até que o contador de número de gerações atinja o paramêtro que define o número máximo de gerações ($numeroDeGeracoes$).
+
+Na linha 6, a população intermediária é definida como um conjunto vazio de indivíduos. Em seguida o conceito de elitismo é aplicado inserindo o melhor indivíduo da população atual diretamente na população intermediária (linha 7). Na linha 8 um laço de repetição é iniciado para realizar a gerações dos outros indivíduos da população intermediária. Ao final deste laço de repetição a população intermediária terá o mesmo número de indivíduos que a população atual.
+
+Os indivíduos que serão utilizados como pais na recombinação são selecionados através de um torneio (linha 9). O torneio escolhe o melhor indivíduo dentro alguns selecionados aleatoriamente da população atual. O número de indivíduos selecionados aleatoriamente para o torneio é definido por um parâmetro da PG (tamanho do torneio). São realizados dois torneios e os dois pais para a recombinação são selecionados ($pai1$ e $pai2$).
+
+Em seguida um teste de probabilidade é aplicado ao parâmetro que define a taxa de recombinação. Caso o teste seja positivo, o indivíduo filho é gerado através de um operador de recombinação (selecionado aleatoriamente dentre os 4 desenvolvidos) aplicado aos pais selecionados no torneio. Caso contrário o melhor indivíduo selecionado nos torneios (melhor($pai1$,$pai2$)) é copiado para o indivíduo filho (linhas 10 a 13).
+
+Após a criação do indivíduo filho, um novo teste de probabilidade é aplicado ao parâmetro que define a taxa de mutação. Caso este teste seja positivo um operador de mutação (selecionado aleatoriamente dentre os 7 criados) será aplicado ao indivíduo filho (linhas 14 e 15). Na linha 16 este indivíduo filho é inserido na população intermediária.
+
+Em seguida, após todos os indivíduos da população intermediária terem sido criados, toda a população intermediária é simulada e avaliada, atribuindo-se um valor de \emph{fitness} à todos os novos indivíduos (linha 17). Dessa forma, toda a população intermediária é copiada para a população principal (linha 18). É importante observar que todos os indivíduos anteriormente contidos na população principal são descartados neste ponto. Por último o contador do número de gerações é incrementado na linha 19.
+
+\begin{figure}[!htb]
+\centering
+\vspace*{11pt}
+
+\includegraphics[width=0.95\textwidth]{img/FluxoGAMPGrubix.pdf}
+\caption{Visão geral da execução da PG e sua interação com o \emph{framework} porposto.}
+\label{fig:AGDemo}
+\end{figure}
+
+Ao final da execução da PG o melhor indivíduo da população principal é retornado como a melhor solução encontrada (linha 20). A \figurename~\ref{fig:AGDemo} apresenta uma visão geral do fluxo de execução da PG e sua interações com os outros módulos do \emph{framework}.
+

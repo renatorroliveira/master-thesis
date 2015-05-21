@@ -1,0 +1,586 @@
+\documentclass{grubi-presentation}
+\usepackage[portuges]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{ae}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{tabularx}
+%\usepackage{enumitem}
+\usepackage[vlined,portuguese]{algorithm2e}
+%\usepackage[alf,abnt-etal-cite=3,abnt-etal-list=0,abnt-etal-text=emph,bibjustif,abnt-repeated-title-omit=yes,abnt-show-options=warn]{abntex2cite}
+
+\title[GeneticNet]{Programação Genética Aplicada à Geração Automatizada de Aplicações para Redes de Sensores sem Fio}
+\author[Renato R. R. de Oliveira]{Renato Resende Ribeiro de Oliveira}
+\institute[DCC/UFLA]{
+	Departamento de Ciência da Computação\\
+	Universidade Federal de Lavras
+}
+\date{24 de janeiro de 2014}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Sumário}
+\tableofcontents
+\end{frame}
+
+\section{Introdução e Contextualização}
+
+\begin{frame}{Contextualização}
+\begin{block}{Redes de Sensores sem Fio}
+\begin{itemize}
+	\item Uma rede composta por vários \textbf{nós sensores}.
+	\item Redes afetadas por características de sistemas massivamente distribuídos.
+	\item Ambiente físico e arquitetura de rede muito dinâmicos e diversificados.
+\end{itemize}
+\end{block}
+\begin{block}{Nós Sensores}
+\begin{itemize}
+	\item Microprocessador de baixo poder de processamento.
+	\item Pouca memória.
+	\item Rádio de comunicação sem fio de baixa potência.
+	\item Baterias pequenas (fonte de energia limitada).
+	\item Sensores de ambiente (temperatura, umidade, pressão, entre outros).
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Motivação}
+\begin{block}{Desenvolvimento de Aplicações para RSSF}
+\begin{itemize}
+	\item Linguagens de programação de baixo nível.
+	\item Controle de características específicas de hardware.
+	\item Especialização do programa para cada nó sensor baseado em características como posição geográfica e o papel do nó sensor na rede.
+	\item Implantação física do programa é complicada.
+\end{itemize}
+\begin{center}{\bfseries
+Programação Automatizada + Implantação Automatizada\\
+$\rightarrow$ Custos e esforço humano reduzidos
+}\end{center}
+\end{block}
+\end{frame}
+
+\begin{frame}{Objetivos}
+\begin{block}{Objetivo Geral}
+Desenvolver um \emph{framework} capaz de gerar, de forma automática, o código-fonte de aplicações para RSSF.
+\end{block}
+\begin{block}{Estrutura do \emph{Framework} Proposto}
+\begin{itemize}
+	\item \emph{Middleware} de RSSF:
+	\begin{itemize}
+		\item Provê uma linguagem de programação em \emph{scripts} de alto nível.
+		\item Provê funcionalidades pré-programadas.
+	\end{itemize}
+	\item Um módulo de Programação Genética (PG):
+	\begin{itemize}
+		\item Evolui programas descritos na linguagem de \emph{scripts} provida pelo \emph{middleware}.
+	\end{itemize}
+	\item Um módulo de simulação de RSSF:
+	\begin{itemize}
+		\item Simula e calcula o \emph{fitness} dos programas gerados pela PG.
+		\item Realizada uma simulação simplificada e rápida.
+	\end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+%%
+%%%%
+%%%%%%%%
+\section{Referencial Teórico}
+
+\begin{frame}{Referencial Teórico}
+\begin{block}{\emph{Middlewares} de RSSF}
+\begin{itemize}
+	\item Abstraem características específicas de hardware.
+	\item Simplificam o processo de desenvolvimento provendo de linguagens de programação de alto nível.
+	\item Automatizam o processo de implantação das aplicações.
+	\item Fornecem funcionalidades específicas pré-programadas.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Referencial Teórico}
+\begin{block}{Programação Genética}
+\begin{itemize}
+	\item Algoritmos evolutivos aplicados à geração de programas de computador.
+	\item Baseada na teoria de seleção natural.
+	\item Cria e evolui uma população de indivíduos (programas).
+	\item Utiliza rotinas de seleção, recombinação, mutação e avaliação.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Referencial Teórico}
+\begin{block}{Simuladores de RSSF}
+\begin{itemize}
+	\item Simular ambiente físico.
+	\item Simular características de hardware e comunicação sem fio.
+	\item Simular movimento e dinamicidade da rede.
+	\item Processo de alto custo computacional.
+	\item Exemplos:
+	\begin{itemize}
+		\item NS-3
+		\item GNS-3
+		\item GRUBIX
+	\end{itemize}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Trabalhos Relacionados}
+Algoritmos evolutivos em geral:
+\begin{block}{}
+\begin{itemize}
+	\item Otimização da densidade, conectividade e consumo de energia utilizando algoritmo genético. \cite{Bhondekar2009}
+\end{itemize}
+\end{block}
+Utilizando Programação Genética:
+\begin{block}{}
+\begin{itemize}
+	\item Automatização da configuração de aplicações de rastreamento através de Programação Genética e rede reguladora de genes. \cite{Markham2011}
+	\item Geração de algoritmos distribuídos utilizando Programação Genética. \cite{ThomasWeise2006}
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+%%%
+%%%%%%%%%%%%%%%%
+\section{Metodologia}
+\subsection{Visão Geral}
+
+
+\begin{frame}{Arquitetura Geral}
+\begin{figure}[!h!t!b]
+ \centering
+ \includegraphics[width=0.55\textwidth]{../img/no_sensor.pdf}
+ \caption{Ilustração esquemática de uma RSSF executando o sistema proposto.}
+ \label{fig:nosensor}
+\end{figure}
+\end{frame}
+
+\begin{frame}{System Overview}
+\begin{figure}[!h!t!b]
+ \centering
+ \includegraphics[width=\textwidth]{../img/arquitetura_geral.pdf}
+ \caption{Visão geral da ferramenta proposta.}
+ \label{fig:overview}
+\end{figure}
+\end{frame}
+
+
+%%
+%%%%%
+%%%%%%
+\subsection{Problema Abordado e Função Objetivo}
+
+\begin{frame}{Problema de Detecção de Eventos (PDE)}
+\begin{itemize}
+\item Problema clássico.
+\item Avaliar a ferramenta proposta.
+\item Exemplo: Monitoramento de florestas para detecção de incêndios.
+\end{itemize}
+\begin{block}{Características}
+\begin{itemize}
+\item A rede fica ``parada'' (sem enviar informações entre os nós) realizando medições periódicas no ambiente.
+\item Quando um determinado comportamento do ambiente é detectado, um evento ocorre.
+\item A detecção do evento gera uma mensagem que deve ser enviada até o nó \emph{sink} comunicando a ocorrência do evento.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Problema de Detecção de Eventos}
+\begin{figure}[!h]
+ \centering
+ \includegraphics[width=0.85\columnwidth]{../img/pde.pdf}
+ \label{fig:pde}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Função Objetivo}{Parâmetros da função objetivo.}
+\begin{block}{}
+\begin{itemize}
+\item[$C_{el}$] Custo de eventos que não forem entregues ao \emph{sink}.
+\item[$C_{ms}$] Custo do envio de mensagens.
+\item[$C_{pm}$] Custo do envio prematuro de mensagens.
+\item[$C_{pa}$] Custo de ações prematuras.
+\item[$C_{mwd}$] Custo de mensagens enviadas para direção incorreta.
+\item[$C_{ed}$] Custo da distância mínima entre a mensagem e o \emph{sink}.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Função Objetivo}{Dados de simulação utilizados pela função objetivo.}
+\begin{block}{}
+\begin{itemize}
+\item[$PS$] Tamanho do \emph{script} gerado.
+\item[$EL$] Número de eventos que não foram comunicados ao \emph{sink}.
+\item[$PM$] Número de mensagens enviadas antes que algum evento ocorra.
+\item[$PA$] Número de ações executadas antes que um evento seja detectado.
+\item[$MWD$] Número de mensagens enviadas para a direção contrária do \emph{sink}.
+\item[$ED$] Distância mínima entre a mensagem comunicando o evento do nó \emph{sink}.
+\item[$MS$] Número total de mensagens enviadas durante a simulação.
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Função Objetivo}
+Considerando estes parâmetros e dados de simulação, a função objetivo é definida a seguir na Equação~\ref{eq:obj}.
+\begin{block}{}
+\begin{equation}
+\begin{array}{r l}
+ Min\ F(\cdots) = & C_{ms}\cdot MS + C_{el}\cdot EL  + C_{pa}\cdot PA + C_{pm}\cdot PM\\
+                + & PS + C_{ed}\cdot (ED)^2 + C_{mwd}\cdot MWD\cdot EL\\
+\end{array}
+\label{eq:obj}
+\end{equation}
+\end{block}
+\end{frame}
+
+
+%%
+%%%%%
+%%%%%%
+\subsection{Módulo de Simulação}
+
+\begin{frame}{Módulo de Simulação}{Pseudocódigo da execução do simulador.}
+\small
+\begin{algorithm}[H]
+\KwData{$script$}
+\Begin{
+	$middleware\leftarrow$ Implementação simulada.\;
+	\For{$node\in sensorNodes$}{
+		$node$.instalaMiddleware($middleware$)\;
+		$node$.$middleware$.implantaScript($script$)\;
+		$node$.$middleware$.inicializa()\;
+	}
+	\For{$currentTime \leftarrow 1$ até $simulationMaxTime$}{
+		\For{$event\in eventTriggers$}{
+			\If{$event$.ocorreu($currentTime$)}{
+				$sensorNodes$.disparaEvento($event$)\;
+				$eventTriggers$.removeEvento($event$)\;
+			}
+		}
+		\For{$node\in sensorNodes$}{
+			$node$.$middleware$.executaScript()\;
+		}
+	}
+}
+\end{algorithm}
+\normalsize
+\end{frame}
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Middleware Proposto}
+
+\begin{frame}{\emph{Middleware} Proposto}{Arquitetura geral do \emph{middleware}.}
+\begin{figure}[!h!t!b]
+\centering
+\includegraphics[width=0.85\textwidth]{../img/Middleware.pdf}
+\label{fig:sensorarch}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\emph{Middleware} Proposto}{Estruturas existentes na linguagem proposta.}
+\begin{block}{}
+\begin{table}[!h!t!b]
+\centering
+\begin{tabularx}{\textwidth}{l l X}
+Estrutura & Exemplo & Descrição\\
+\hline\hline
+\emph{trigger} & if($ev1$ $op$ $ev2$) & Estrutura condicional composta de dois operandos e um operador.\\
+\emph{send command} & send($ev$,$dest$) & Envia um dado para um nó vizinho.\\
+\emph{up event command} & up($ev$) & Guarda o valor $true$ em um evento.\\
+\emph{down event command} & down($ev$) & Guarda o valor $false$ em um evento.\\
+\end{tabularx}
+\label{tb:scripts}
+\end{table}
+\end{block}
+\end{frame}
+
+\begin{frame}{\emph{Middleware} Proposto}{Exemplo de \emph{script} na linguagem proposta.}
+\small
+\begin{algorithm}[H]
+\If{A1 and A2}{
+	up(P2)\;
+	down(P3)\;
+	send(P3, $up$)\;
+	down(P1)\;
+}
+\If{P1 or A2}{
+	down(P1)\;
+	send(P2, $right$)\;
+}
+\If{P3 and P2}{
+	up(P2)\;
+	down(P1)\;
+	send(P1, $down$)\;
+}
+\end{algorithm}
+\normalsize
+\end{frame}
+
+
+%%
+%%%%
+%%%%%%
+\subsection{Programação Genética}
+
+\begin{frame}{Programação Genética}{Representação do indivíduo.}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.65\textwidth]{../img/ExemploIndividuo.pdf}
+\label{fig:individuo}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Programação Genética}{Operador de recombinação de um ponto em \emph{triggers}.}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.95\textwidth]{../img/cross-onepoint-trigger.pdf}
+\label{fig:crossover1pTrigger}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Programação Genética}{Operador de recombinação de um ponto em comandos.}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.95\textwidth]{../img/cross-onepoint-command.pdf}
+\label{fig:crossover1pTrigger}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Programação Genética}{Operador de recombinação uniforme em \emph{trigger}.}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.95\textwidth]{../img/cross-uniform-trigger.pdf}
+\label{fig:crossover1pTrigger}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Programação Genética}{Operador de recombinação uniforme em comandos.}
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.95\textwidth]{../img/cross-uniform-command.pdf}
+\label{fig:crossover1pTrigger}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Programação Genética}{Operadores de mutação.}
+\begin{table}[!h]
+\footnotesize
+\centering
+\begin{tabularx}{0.95\textwidth}{|l X|}
+\hline\hline
+Substituir comando: & Sorteia um comando de forma aleatória e troca este por outro comando gerado também aleatoriamente.\\ \hline
+Reiniciar comandos: & Faz o mesmo que ``Substituir comando'', porém ele substitui todos os comandos de um \emph{trigger} escolhido aleatoriamente.\\ \hline
+Remover e inserir: & Sorteia um comando em um $trigger$ aleatório, remove o comando deste \emph{trigger} e o insere em uma posição aleatória em outro $trigger$.\\ \hline
+Trocar comandos: & Sorteia dois comandos dentro de um \emph{trigger} aleatório e troca os dois de posição na lista de comandos deste \emph{trigger}.\\ \hline
+Alterar comando: & Sorteia um comando e modifica os parâmetros do mesmo, como eventos e destinos.\\ \hline
+Trocar $triggers$: & Troca a ordem de dois $triggers$ sorteados aleatoriamente na lista de \emph{triggers} de um indivíduo.\\ \hline
+Alterar cabeçalho: & Modifica os parâmetros do cabeçalho de um $trigger$ sorteado aleatoriamente, alterando os operadores e operandos.\\ \hline
+\hline
+\end{tabularx}
+\label{tb:mutation}
+\normalsize
+\end{table}
+\end{frame}
+
+\begin{frame}{Programação Genética}{Algoritmo evolutivo.}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.95\textwidth]{../img/FluxoGAMPGrubix.pdf}
+\label{fig:AGDemo}
+\end{figure}
+\end{frame}
+
+
+%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experimentos Computacionais e Resultados}
+
+\begin{frame}{Experimentos Computacionais}{Instâncias de teste criadas.}
+\begin{table}[!h!t!b]
+\centering
+\begin{tabularx}{0.95\textwidth}{X c X X}
+\hline\hline
+           & Num. de & Dimensões &           \\
+Instância  & Nós     & da Área   & Topologia \\
+\hline\hline
+G25  & 25  & 40m x 40m   & Em Grade \\
+G49  & 49  & 60m x 60m   & Em Grade \\
+G225 & 225 & 140m x 140m & Em Grade \\
+G625 & 625 & 240m x 240m & Em Grade \\
+R25  & 25  & 40m x 40m   & Randômica \\
+R49  & 49  & 60m x 60m   & Randômica \\
+R225 & 225 & 140m x 140m & Randômica \\
+R625 & 625 & 240m x 240m & Randômica \\
+\hline\hline
+\end{tabularx}
+\label{tb:insts}
+\end{table}
+\end{frame}
+
+\begin{frame}{Experimentos Computacionais}{Ilustração da RSSF representada pela instância G49.}
+\begin{figure}[!h!t!b]
+ \centering
+ \includegraphics[height=0.7\textheight]{../img/grid-topology-49.pdf}
+ \label{fg:topologyg}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Experimentos Computacionais}{Ilustração da RSSF representada pela instância R25.}
+\begin{figure}[!h!t!b]
+ \centering
+ \includegraphics[height=0.7\textheight]{../img/random-topology-25.pdf}
+ \label{fg:topology}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Experimentos Computacionais}{Resultados obtidos.}
+\begin{table}[!h]
+\centering
+\begin{tabularx}{0.95\textwidth}{X X X X X X}
+\hline\hline
+	        &	\multicolumn{3}{c}{Fitness da Melhor Solução} & Coeficiente & Tempo\\
+Instância	&	Média	&	Mínimo	&	Máximo	&	de Varia.	&	Total(s)	\\
+\hline\hline
+G25	&	22,6	&	20	&	27	&	13,55\%	&	55,1	\\
+G49	&	29	&	29	&	29	&	0,00\%	&	116,6	\\
+G225	&	61	&	61	&	61	&	0,00\%	&	654,7	\\
+G625	&	101	&	101	&	101	&	0,00\%	&	2.135	\\
+R25	&	32,9	&	30	&	53	&	22,22\%	&	88,7	\\
+R49	&	84,8	&	43	&	189	&	70,75\%	&	208,4	\\
+R225	&	1.157	&	376	&	2.722	&	77,74\%	&	1.927,3	\\
+R625	&	2.756.2	&	461	&	4.384	&	47,27\%	&	4.447,4	\\
+\hline\hline
+\end{tabularx}
+\label{tb:results}
+\end{table}
+\end{frame}
+
+\begin{frame}{Experimentos Computacionais}{Melhor \emph{script} encontrado para a instância G49.}
+\begin{algorithm}[H]
+\If{P0 and A3}{
+	send(P0, down)\;
+}
+\If{P0 and A1}{
+	send(P0, up)\;
+}
+\If{A2 and P0}{
+	send(P0, right)\;
+}
+\If{A4 and P0}{
+	send(P0, left)\;
+}
+\If{A0 or P0}{
+	up(P0)\;
+}
+\end{algorithm}
+\normalsize
+\end{frame}
+
+
+%%%%%
+%%%%%%%%%%%%%%%%%
+\section{Conclusões e Trabalhos Futuros}
+
+\begin{frame}{Conclusões e Trabalhos Futuros}
+\begin{block}{Conclusões}
+\begin{itemize}
+	\item O \emph{framework} mostrou-se promissor.
+	\item O sistema é capaz de solucionar o PDE para redes com topologia em grade e topologia randômica.
+	\item A ferramenta consegue soluções boas mesmo em redes grandes (mais de 600 nós sensores).
+	\item Para topologias randômicas, o método é um pouco instável quando executado por apenas 2.000 gerações.
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Conclusões e Trabalhos Futuros}
+\begin{block}{Publicações}
+\begin{itemize}
+  \item 2013 IEEE Congress on Evolutionary Computation \cite{Oliveira2013a}.
+  \item Workshop on Software Technologies for Future Embedded and Ubiquitous Systems \cite{Heimfarth2013}.
+  \item III Workshop de Sistemas Distribuídos Autonômicos \cite{Oliveira2013b}.
+\end{itemize}
+\end{block}
+\begin{block}{Trabalhos Futuros}
+\begin{itemize}
+	\item Tratar ocorrência de mais de um tipo de evento simultaneamente.
+	\item Realizar testes com nós sensores reais.
+	\item Estender abordagem para tratar outros tipos de problemas de RSSF, como rastreamento de alvos.
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+%\begin{frame}{Referências}
+%\bibliography{../sections/refs}
+%\end{frame}
+
+
+\begin{frame}{Referências}
+\begin{thebibliography}{}
+\bibitem[Bhondekar et~al. 2009]{Bhondekar2009}
+Bhondekar, A.~P., Vig, R., Singla, M.~L., Ghanshyam, C., and Kapur, P. (2009).
+\newblock Genetic algorithm based node placement methodology for wireless
+  sensor networks.
+\newblock In {\em Proceedings of the International MulticConference of
+  Engineers and Computer Scientists}.
+
+\bibitem[de~Oliveira et~al. 2013a]{Oliveira2013a}
+de~Oliveira, R. R.~R., Heimfarth, T., de~Bettio, R.~W., Arantes, M.~S., and
+  Toledo, C. F.~M. (2013a).
+\newblock A genetic programming based approach to automatically generate
+  wireless sensor networks applications.
+\newblock In {\em Evolutionary Computation (CEC), 2013 IEEE Congress on}, pages
+  1771--1778, Canc\'{u}n, M\'{e}xico. IEEE Publishing.
+\end{thebibliography}
+\end{frame}
+
+\begin{frame}{Referências}
+\begin{thebibliography}{}
+\bibitem[de~Oliveira et~al. 2013b]{Oliveira2013b}
+de~Oliveira, R. R.~R., Heimfarth, T., Marques, A. F.~F., de~Bettio, R.~W., and
+  Arantes, J.~S. (2013b).
+\newblock Programa\c{c}\~{a}o autom\'{a}tica de redes de sensores sem fio
+  utilizando programa\c{c}\~{a}o gen\'{e}tica.
+\newblock In {\em III Workshop de Sistemas Distribu\'{i}dos Auton\^{o}micos
+  (WoSiDA)}, pages 45--48, Bras\'{i}lia, Brasil.
+
+\bibitem[Heimfarth et~al. 2013]{Heimfarth2013}
+Heimfarth, T., de~Oliveira, R. R.~R., de~Bettio, R.~W., Marques, A. F.~F., and
+  Toledo, C. F.~M. (2013).
+\newblock Automatic generation and configuration of wireless sensor networks
+  applications with genetic programming.
+\newblock In {\em Software Technologies for Future Embedded and Ubiquitous
+  Systems (SEUS), Workshop on}, Paddeborn, Germany. IEEE Publishing.
+\end{thebibliography}
+\end{frame}
+
+\begin{frame}{Referências}
+\begin{thebibliography}{}
+\bibitem[Markham and Trigoni 2011]{Markham2011}
+Markham, A. and Trigoni, N. (2011).
+\newblock The automatic evolution of distributed controllers to configure
+  sensor networks operation.
+\newblock {\em The Computer Journal}, 54(3).
+
+\bibitem[Weise 2006]{ThomasWeise2006}
+Weise, T. (2006).
+\newblock Genetic programming for sensor networks.
+\newblock Technical report, University of Kassel, University of Kassel.
+\end{thebibliography}
+\end{frame}
+
+
+\end{document}
+

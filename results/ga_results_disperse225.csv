@@ -1,0 +1,564 @@
+
+
+|===,Execution:,1,===|
+
+Generation,Time,Best Value
+0,0,1.94262e+06
+100,228,2722
+200,346,2722
+300,469,2722
+400,572,2722
+500,684,2722
+600,817,2722
+700,915,2722
+800,1036,2722
+900,1159,2722
+1000,1260,2722
+1100,1371,2722
+1200,1489,2722
+1300,1612,2722
+1400,1732,2722
+1500,1845,2722
+1600,1949,2722
+1700,2064,2722
+1800,2192,2722
+1900,2305,2722
+2000,2407,2722
+
+Best Individual found: 2722
+====================
+Fitness Program Size: 2
+Fitness Packets Sent: 2720
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 2722
+====================
+
+if (passive[0] OR passive[0]) {
+send(0, true, 'down')
+send(0, true, 'up')
+}
+if (passive[0] OR active[0]) {
+passive[0] = true
+passive[0] = true
+passive[0] = true
+passive[0] = true
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,66,191,2722
+
+
+
+|===,Execution:,2,===|
+
+Generation,Time,Best Value
+0,0,9.11962e+07
+100,95,2722
+200,201,2722
+300,311,2722
+400,422,2722
+500,526,1619
+600,604,914
+700,668,508
+800,722,508
+900,775,508
+1000,828,508
+1100,889,508
+1200,946,508
+1300,998,508
+1400,1053,508
+1500,1109,508
+1600,1156,508
+1700,1207,508
+1800,1259,508
+1900,1318,376
+2000,1397,376
+
+Best Individual found: 376
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 372
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 376
+====================
+
+if (active[2] AND passive[0]) {
+send(0, true, 'right')
+passive[0] = false
+}
+if (active[3] AND passive[0]) {
+send(0, true, 'down')
+}
+if (passive[0] AND active[1]) {
+send(0, true, 'up')
+}
+if (passive[0] OR active[0]) {
+send(0, true, 'left')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1838,1279,376
+
+
+
+|===,Execution:,3,===|
+
+Generation,Time,Best Value
+0,0,612393
+100,123,2722
+200,235,2722
+300,365,2722
+400,482,2722
+500,602,2722
+600,721,2722
+700,848,2722
+800,969,2722
+900,1106,2722
+1000,1220,2722
+1100,1363,2722
+1200,1483,2722
+1300,1603,2722
+1400,1723,2575
+1500,1823,2135
+1600,1910,2135
+1700,1955,884
+1800,2003,884
+1900,2054,884
+2000,2114,884
+
+Best Individual found: 884
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 880
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 884
+====================
+
+if (passive[0] AND active[3]) {
+send(0, true, 'down')
+}
+if (passive[0] OR passive[0]) {
+send(0, true, 'up')
+}
+if (active[0] OR passive[0]) {
+passive[0] = true
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'right')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1639,1930,884
+
+
+
+|===,Execution:,4,===|
+
+Generation,Time,Best Value
+0,0,1.92678e+08
+100,178,2730
+200,294,2730
+300,407,2730
+400,528,2722
+500,622,2722
+600,745,2722
+700,862,2722
+800,983,2722
+900,1116,2722
+1000,1238,2722
+1100,1342,2722
+1200,1470,887
+1300,1542,887
+1400,1604,887
+1500,1672,887
+1600,1737,884
+1700,1783,884
+1800,1822,884
+1900,1870,884
+2000,1923,884
+
+Best Individual found: 884
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 880
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 884
+====================
+
+if (active[3] AND passive[0]) {
+send(0, true, 'down')
+}
+if (passive[0] AND passive[0]) {
+send(0, true, 'up')
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'right')
+}
+if (active[0] OR active[0]) {
+passive[0] = true
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1592,1732,884
+
+
+
+|===,Execution:,5,===|
+
+Generation,Time,Best Value
+0,0,965875
+100,67,540
+200,124,540
+300,186,540
+400,243,540
+500,290,540
+600,342,540
+700,398,540
+800,448,540
+900,514,540
+1000,576,540
+1100,642,540
+1200,703,540
+1300,756,540
+1400,808,540
+1500,855,540
+1600,917,540
+1700,975,540
+1800,1031,540
+1900,1086,540
+2000,1136,540
+
+Best Individual found: 540
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 536
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 540
+====================
+
+if (active[0] OR active[0]) {
+send(0, true, 'left')
+}
+if (passive[0] AND passive[0]) {
+send(0, true, 'down')
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'right')
+}
+if (active[1] AND passive[0]) {
+send(0, true, 'up')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,64,47,540
+
+
+
+|===,Execution:,6,===|
+
+Generation,Time,Best Value
+0,0,2730
+100,150,2722
+200,268,2722
+300,403,2722
+400,540,2722
+500,666,2722
+600,804,2722
+700,952,2722
+800,1094,2722
+900,1226,2722
+1000,1346,2722
+1100,1478,2722
+1200,1633,2722
+1300,1765,2722
+1400,1905,2722
+1500,2057,2722
+1600,2178,2091
+1700,2256,887
+1800,2333,887
+1900,2410,887
+2000,2489,887
+
+Best Individual found: 887
+====================
+Fitness Program Size: 3
+Fitness Packets Sent: 884
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 887
+====================
+
+if (active[3] AND passive[0]) {
+send(0, true, 'down')
+passive[0] = true
+passive[0] = true
+}
+if (passive[0] OR active[0]) {
+send(0, true, 'up')
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'right')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1609,2185,887
+
+
+
+|===,Execution:,7,===|
+
+Generation,Time,Best Value
+0,0,1.66559e+08
+100,108,2723
+200,196,2723
+300,284,2723
+400,412,2489
+500,504,883
+600,587,883
+700,668,883
+800,740,883
+900,798,880
+1000,868,880
+1100,931,880
+1200,992,880
+1300,1047,579
+1400,1099,579
+1500,1162,579
+1600,1216,579
+1700,1260,579
+1800,1321,579
+1900,1377,579
+2000,1421,574
+
+Best Individual found: 574
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 570
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 574
+====================
+
+if (active[1] AND passive[0]) {
+send(0, true, 'up')
+}
+if (passive[0] OR active[0]) {
+send(0, true, 'down')
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'right')
+}
+if (active[0] AND active[1]) {
+send(0, true, 'left')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1983,1411,574
+
+
+
+|===,Execution:,8,===|
+
+Generation,Time,Best Value
+0,0,1.39536e+08
+100,101,2723
+200,215,2722
+300,352,2722
+400,472,2722
+500,601,2722
+600,740,2722
+700,866,2722
+800,982,2722
+900,1106,2722
+1000,1239,2722
+1100,1379,2722
+1200,1490,2722
+1300,1622,2722
+1400,1741,2722
+1500,1870,2722
+1600,1994,2722
+1700,2106,2722
+1800,2226,2722
+1900,2344,2722
+2000,2468,2722
+
+Best Individual found: 2722
+====================
+Fitness Program Size: 2
+Fitness Packets Sent: 2720
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 2722
+====================
+
+if (passive[0] OR passive[0]) {
+send(0, true, 'up')
+send(0, true, 'down')
+}
+if (active[0] OR passive[0]) {
+passive[0] = true
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,148,151,2722
+
+
+
+|===,Execution:,9,===|
+
+Generation,Time,Best Value
+0,0,1.36041e+08
+100,156,2730
+200,311,2730
+300,474,2730
+400,617,2730
+500,706,887
+600,776,884
+700,829,884
+800,887,884
+900,936,884
+1000,1010,380
+1100,1088,376
+1200,1159,376
+1300,1227,376
+1400,1302,376
+1500,1376,376
+1600,1454,376
+1700,1539,376
+1800,1613,376
+1900,1686,376
+2000,1762,376
+
+Best Individual found: 376
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 372
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 376
+====================
+
+if (passive[0] AND active[3]) {
+send(0, true, 'down')
+}
+if (passive[0] AND active[2]) {
+passive[0] = false
+send(0, true, 'right')
+}
+if (passive[0] OR active[0]) {
+send(0, true, 'left')
+}
+if (active[1] AND passive[0]) {
+send(0, true, 'up')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1008,1015,376
+
+
+
+|===,Execution:,10,===|
+
+Generation,Time,Best Value
+0,0,1.38833e+06
+100,119,2708
+200,247,2708
+300,385,2708
+400,510,2708
+500,632,2708
+600,755,2708
+700,875,2708
+800,994,2708
+900,1101,1717
+1000,1207,1717
+1100,1301,1717
+1200,1395,1717
+1300,1490,1717
+1400,1595,1717
+1500,1689,1717
+1600,1784,1717
+1700,1883,1717
+1800,1973,1717
+1900,2067,1605
+2000,2156,1605
+
+Best Individual found: 1605
+====================
+Fitness Program Size: 3
+Fitness Packets Sent: 1602
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 1605
+====================
+
+if (active[3] AND passive[0]) {
+send(0, true, 'down')
+passive[0] = false
+}
+if (active[0] OR active[0]) {
+passive[0] = false
+send(0, true, 'left')
+}
+if (passive[0] OR passive[0]) {
+send(0, true, 'down')
+send(0, true, 'up')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1899,2064,1605
+

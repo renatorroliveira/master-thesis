@@ -1,0 +1,346 @@
+\documentclass{ufla}
+\usepackage[portuges]{babel}
+\usepackage[allbordercolors={1 1 1}, bookmarks=true, bookmarksnumbered=true,
+		pdftitle={Programação Genética Aplicada à Geração Automatizada de Aplicações para Redes de Sensores sem Fio},
+        pdfauthor={Renato Resende Ribeiro de Oliveira},
+        pdfsubject={Dissertação de Mestrado},
+        pdfkeywords={Redes de sensores sem fio, Middlewares, Programação Genética, Algoritmo Genético}]{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage[cmex10]{amsmath}
+\usepackage{ae}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage[vlined,linesnumbered,titlenumbered,portuguese]{algorithm2e}
+\usepackage[alf,abnt-etal-cite=3,abnt-etal-list=0,abnt-etal-text=plain,abnt-repeated-title-omit=yes,abnt-show-options=warn]{abntex2cite}
+\usepackage{pslatex}
+
+% Configuracao do listings
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\small\ttfamily,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\small,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=1ex,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,           % adds a frame around the code
+tabsize=2,          % sets default tabsize to 2 spaces
+captionpos=t,           % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+keywordstyle=\color[rgb]{0,0,1},
+commentstyle=\color[rgb]{0.133,0.545,0.133},
+stringstyle=\color[rgb]{0.627,0.126,0.941}
+}
+
+
+\newcommand{\defs}[1]{\textsl{#1}}
+
+\author{Renato Resende Ribeiro de Oliveira}
+\title{Programação genética aplicada à geração automatizada de aplicações para redes de sensores sem fio }
+%\folhaaprovacao{Img/folha-de-aprovacao.pdf}
+\date{2014}
+\tipo{Dissertação apresentada à Universidade Federal de Lavras, como parte das exigências do Programa de Pós-Graduação em Ciência da Computação, área de concentração em Redes de Computadores e Sistemas Embarcados, para a obtenção do título de Mestre.}
+\areaconcentracao{Redes de Computadores e Sistemas Embarcados}
+
+\orientador{Dr. Tales Heimfarth}
+\coorientador{Dr. Raphael Winckler de Bettio}
+\coorientadorbanca{Dr. Raphael W. de Bettio}
+\coorientadorbancainst{UFLA}
+\bancaum{Dr. Luiz Henrique A. Correia}
+\bancauminst{UFLA}
+\bancadois{Dr. Cláudio Fabiano M. Toledo}
+\bancadoisinst{USP}
+\defesa{24 de janeiro de 2014.}
+\palchaves{Redes de Sensores sem Fio. Middlewares. Programação Genética. Algoritmo Genético.}
+\keywords{Wireless Sensor Networks. Middlewares. Genetic Programming. Genetic Algorithm.}
+
+
+% Dados para ficha catalográfica
+\fcautor{Oliveira, Renato Resende Ribeiro de.}
+\fcorientador{Tales Heimfarth}
+% Tipo de material para ficha catalográfica
+\fctipo{Dissertação (mestrado) -- Universidade Federal de Lavras, 2014.}
+% dados para ficha catalográfica 
+\fccatalogacao{1. Redes de sensores sem fio. 2. Programação genética. 3. Algoritmo genético. 4. Middlewares. I. Universidade Federal de Lavras. II. Título.}
+% classificação de acordo com a CDD
+\fccdd{CDD -- 004.6}
+
+
+\hyphenation{Ciência Computação Colegiado Curso Bacharel Universidade Federal Lavras Graduação Redes Computadores Sistemas Embarcados}
+
+% Aumente este numero para aumentar o espacamento no sumário
+% entre os numeros das secoes e os titulos.
+\scalenumwidth{1}
+
+% Preguicoso :P
+\sloppy
+
+\begin{document}
+
+\pagestyle{empty}
+\dedic{
+Dedico esta dissertação à minha amada esposa Ana Cristina, que me apoiou plenamente durante toda esta jornada.\\
+Me acompanhou durante todas as noites sem dormir e as correrias de prazos e deadlines...
+}
+
+\thanks{
+Agradeço ao professor Cláudio, que apesar de estar longe continua me orientando e aconselho até hoje.
+
+Agradeço aos meu orientador professor Tales e ao meu coorientador professor Raphael pelas dicas, conselhos e a plena disponibilidade.
+
+Agradeço meus pais, que apesar das dificuldades sempre me apoiaram e me deram condições para chegar até aqui.
+
+Agradeço ao meu tio professor João Chrysostomo pelo amparo e apoio desde que cheguei em Lavras com 18 anos.
+
+Agradeço à todos os meus colegas do PPGCC da UFLA pela ajuda durante as disciplinas do mestrado.
+
+Agradeço à todos os professores do PPGCC da UFLA pelas instruções e conhecimentos passados.
+
+Agradeço à secretaria do PPGCC da UFLA pela pronta disponibilidade.
+}
+
+\resumo{
+A programação de redes de sensores sem fio (RSSF) é uma tarefa complexa devido à programação em linguagens de baixo nível e à necessidade de uma aplicação distinta para cada sensor. Além disso, sensores sem fios possuem grandes limitações de hardware, como baixo poder de processamento, pouca memória e limitação energética.
+Portanto, a programação automática de RSSF é desejável, uma vez que pode-se contemplar essas dificuldades automaticamente, além de economizar em custos, pois elimina a necessidade de alocar um desenvolvedor para programar a RSSF.
+A geração automática de códigos-fonte para RSSF utilizando programação genética foi pouco estudada na literatura até o momento. A programação genética mostrou-se promissora na geração de código em diversas áreas de aplicação. Dessa forma, o presente estudo propõe o desenvolvimento e a aplicação de algoritmos evolutivos para gerar e evoluir códigos-fonte que solucionem problemas de RSSF.
+O objetivo é que os algoritmos evolutivos desenvolvidos sejam capazes de resolver problemas distintos de RSSF de forma correta (atendendo o objetivo geral do problema) e com uma eficiência satisfatória (principalmente no quesito energia gasta pelos nós sensores). Os resultados obtidos mostram que a ferramenta é capaz de solucionar de maneira ótima o Problema de Detecção de Eventos para RSSF com topologia em grade e de forma satisfatória para RSSF com topologia randômica. Sendo assim, o presente estudo traz contribuições para a área de RSSF, uma vez que a programação automática de RSSF reduz consideravelmente a mão de obra humana na programação das mesmas, além de reduzir os custos da realização desta tarefa.
+} % INCLUIR RESULTADOS
+
+\resumoingles{
+The wireless sensor networks (WSN) programming is a complex task due to the low-level programming languages and the need of a specific application for each sensor. Furthermore, wireless sensors have many hardware limitations such as low processing power, small memory and energetic limitations.
+Hence, the automatic programming of WSNs is desirable since it can automatically address these difficulties, besides saving costs by eliminating the need to allocate a developer to program the WSN.
+The automatic code generation for WSNs using genetic programming has been poorly studied in the literature so far. The genetic programming has proved to be promising in code generation for many application areas. This study proposes the development and application of evolutionary algorithms to generate source codes that solve WSNs problems.
+The developed evolutionary algorithms should be able to solve different problems of WSNs correctly (achieve the main goal of the problem) and with satisfatory efficiency (mainly on energy savings). The obtained results show that the proposed framework is able to find optimal solutions for the Event Detection Problem for WSN with grid topology and to find satisfatory solutions for WSN with randomized topology. Thus, this study brings many contributions to the WSN area since the automatic programming of WSNs drastically reduces the human programming effort, besides saving costs on executing this task.
+}
+
+\listoffigures
+\listoftables
+\listofacronyms{
+	\item[AG] Algoritmo Genético
+	\item[GRUBI] Grupo de Redes Ubíquas
+	\item[MV] Máquina Virtual
+	\item[MW] \emph{Middleware}
+	\item[PDE] Problema de Detecção de Eventos
+	\item[PG] Programação Genética
+	\item[RSSF] Redes de Sensores sem Fio
+	\item[UFLA] Universidade Federal de Lavras
+	\item[USP] Universidade de São Paulo
+}
+\tableofcontents
+
+\pagestyle{ufla}
+
+\include{sections/introducao}
+\include{sections/referencial}
+\include{sections/metodologia}
+\include{sections/resultados}
+\include{sections/conclusao}
+
+%\vfill\null\newpage
+\renewcommand{\baselinestretch}{1.0}
+\bibliographystyle{abntex2-alf}
+%\bibliografia{sections/refs}
+
+\renewcommand{\baselinestretch}{1.0}\normalsize
+\def\hyphenpenalty{10000}
+\def\exhyphenpenalty{10000}
+\refstitle{REFERÊNCIAS}
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9 }
+\normalsize\normalfont
+\setlength{\itemsep}{16pt}
+
+\bibitem[Akyildiz et al. 2002]{Akyildiz2002}
+\abntrefinfo{Akyildiz et al.}{AKYILDIZ et al.}{2002}
+{
+AKYILDIZ, I. et al. Wireless sensor networks: a survey. \textbf{Computer Networks}, Amsterdam, v. 38, n. 4, p. 393-422, 2002. Disponível em: <http://www.sciencedirect.com/science/article/pii/S1389128601003024>. Acesso em: 10 dez. 2013.
+}
+
+\bibitem[Baeck, Fogel e Michalewicz 1997]{Back1997}
+\abntrefinfo{Baeck, Fogel e Michalewicz}{BAECK; FOGEL; MICHALEWICZ}{1997}
+{
+BAECK, T.; FOGEL, D.; MICHALEWICZ, Z. \textbf{Handbook of evolutionary computation}. New York: Taylor and Francis, 1997. 1130 p. Disponível em: <http://books.google.com.br/books?id=n5nuiIZvmpAC>. Acesso em: 10 dez. 2013.
+}
+
+\bibitem[Bhondekar et al. 2009]{Bhondekar2009}
+\abntrefinfo{Bhondekar et al.}{BHONDEKAR et al.}{2009}
+{
+BHONDEKAR, A. P. et al. Genetic algorithm based node placement methodology for wireless sensor networks. In: INTERNATIONAL MULTICCONFERENCE OF ENGINEERS AND COMPUTER SCIENTISTS, 2009, Hong Kong. \textbf{Proceedings...} Hong Kong: IEEE, 2009. 1 CD-ROM.
+}
+
+\bibitem[Consortium 2013]{NS3}
+\abntrefinfo{Consortium}{CONSORTIUM}{2013}
+{
+CONSORTIUM, N. \textbf{The network simulator (ns-3)}. Disponível em: <http://www.nsnam.org/>. Acesso em: 20 dez. 2013.
+}
+
+\bibitem[Grossmann e Saraiva 2013]{GNS3}
+\abntrefinfo{Grossmann e Saraiva}{GROSSMANN; SARAIVA}{2013}
+{
+GROSSMANN, J.; SARAIVA, F. J. \textbf{Graphical Network Simulator (GNS3)}. Disponível em: <http://www.gns3.net/>. Acesso em: 20 dez. 2013.
+}
+
+\bibitem[GRUBI 2013]{Grubix}
+\abntrefinfo{GRUBI}{GRUBI}{2013}
+{
+GRUBI. \textbf{GRUBIX Simulator}. Disponível em: <http://asteroide.dcc.ufla.br/$\sim{}$grubi/grubix/>. Acesso em: 20 dez. 2012.
+}
+
+\bibitem[Guo e Zhang 2014]{Guo2014}
+\abntrefinfo{Guo e Zhang}{GUO; ZHANG}{2014}
+{
+GUO, W.; ZHANG, W. A survey on intelligent routing protocols in wireless sensor networks. \textbf{Journal of Network and Computer Applications}, London, v. 38, p. 185-201, Feb. 2014.
+}
+
+\bibitem[Hansmann et al. 2003]{Hansmann2003}
+\abntrefinfo{Hansmann et al.}{HANSMANN et al.}{2003}
+{
+HANSMANN, U. et al. \textbf{Pervasive computing}. New York: Springer, 2003. 448 p.
+}
+
+\bibitem[Heimfarth et al. 2013]{Heimfarth2013}
+\abntrefinfo{Heimfarth et al.}{HEIMFARTH et al.}{2013}
+{
+HEIMFARTH, T. et al. Automatic generation and configuration of wireless sensor networks applications with genetic programming. In: SOFTWARE TECHNOLOGIES FOR FUTURE EMBEDDED AND UBIQUITOUS SYSTEMS (SEUS), WORKSHOP ON, 2013, Paderborn. \textbf{Proceedings...} Paderborn: IEEE, 2013. p. 9-16.
+}
+
+\bibitem[Holland 1975]{Holland1975}
+\abntrefinfo{Holland}{HOLLAND}{1975}
+{
+HOLLAND, J. H. \textbf{Adaptation in natural and artificial systems}. Ann Arbor: University of Michigan, 1975. 183 p.
+}
+
+\bibitem[Ibrahim 2009]{Ibrahim2009}
+\abntrefinfo{Ibrahim}{IBRAHIM}{2009}
+{
+IBRAHIM, N. Orthogonal classification of middleware technologies. In: MOBILE UBIQUITOUS COMPUTING, SYSTEMS, SERVICES AND TECHNOLOGIES, 3., 2009, Sliema. \textbf{Proceedings...} Sliema: IEEE, 2009. p. 46-51.
+}
+
+\bibitem[Jin e Jiang 2010]{Jin2010}
+\abntrefinfo{Jin e Jiang}{JIN; JIANG}{2010}
+{
+JIN, H.; JIANG, W. \textbf{Handbook of research on developments and trends in wireless sensor networks:} from principle to practice. Hershey: Information Science Reference, 2010. 556 p.
+}
+
+\bibitem[Karl e Willig 2005]{Karl2005}
+\abntrefinfo{Karl e Willig}{KARL; WILLIG}{2005}
+{
+KARL, H.; WILLIG, A. \textbf{Protocols and achitectures for wireless sensor networks}. Chichester: J. Wiley, 2005. 526 p.
+}
+
+\bibitem[Koza 1992]{Koza1992}
+\abntrefinfo{Koza}{KOZA}{1992}
+{
+KOZA, J. R. \textbf{Genetic programming:} on the programming of computers by means of natural selection. Cambridge: MIT, 1992. 835 p.
+}
+
+\bibitem[Langdon e Gustafson 2010]{Langdon2010}
+\abntrefinfo{Langdon e Gustafson}{LANGDON; GUSTAFSON}{2010}
+{
+LANGDON, W. B.; GUSTAFSON, S. M. Genetic programming and evolvable machines: ten years of reviews. \textbf{Genetic Programming and Evolvable Machines}, London, v. 11, p. 321-338, Mar. 2010.
+}
+
+\bibitem[liu e Martonosi 2003]{liu2003}
+\abntrefinfo{liu e Martonosi}{LIU; MARTONOSI}{2003}
+{
+LIU, T.; MARTONOSI, M. Impala: a middleware system for managing autonomic, parallel sensor systems. In: ACM SIGPLAN SYMPOSIUM ON PRINCIPLES AND PRACTICE OF PARALLEL PROGRAMMING, 9., 2003, San Diego. \textbf{Proceedings...} San Diego: ACM, 2003. p. 1-12.
+}
+
+\bibitem[Markham e Trigoni 2011]{Markham2011}
+\abntrefinfo{Markham e Trigoni}{MARKHAM; TRIGONI}{2011}
+{
+MARKHAM, A.; TRIGONI, N. The automatic evolution of distributed controllers to configure sensor networks operation. \textbf{The Computer Journal}, London, v. 54, n. 3, p. 421-438, 2011.
+}
+
+\bibitem[Mckay et al. 2010]{Mckay2010}
+\abntrefinfo{Mckay et al.}{MCKAY et al.}{2010}
+{
+MCKAY, R. I. et al. Grammar-based genetic programming: a survey. \textbf{Genetic Programming and Evolvable Machines.} London, v. 11, p. 365-396, Mar. 2010.
+}
+
+\bibitem[Nan e Li 2008]{Nan2008}
+\abntrefinfo{Nan e Li}{NAN; LI}{2008}
+{
+NAN, G.; LI, M. Evolutionary based approaches in wireless sensor networks: a survey. In: INTERNATIONAL CONFERENCE ON NATURAL COMPUTATION, 4., 2008, Jinan. \textbf{Proceedings...} Jinan: IEEE, 2008. p. 217-222. Disponível em: <http://dl.acm.org/citation.cfm?id=1473247.1473821>. Acesso em: 10 dez. 2013.
+}
+
+\bibitem[Ohtani e Baba 2005]{Ohtani2005}
+\abntrefinfo{Ohtani e Baba}{OHTANI; BABA}{2005}
+{
+OHTANI, K.; BABA, M. A smart optical position sensor with genetic programming technique. In: INSTRUMENTATION AND MEASUREMENT TECHNOLOGY CONFERENCE, 2005, Ottawa. \textbf{Proceedings...} Ottawa: IEEE, 2005. v. 2, p. 1166-1171.
+}
+
+\bibitem[Oliveira et al. 2013]{Oliveira2013a}
+\abntrefinfo{Oliveira et al.}{OLIVEIRA et al.}{2013a}
+{
+OLIVEIRA, R. R. R. de et al. A genetic programming based approach to automatically generate wireless sensor networks applications. In: EVOLUTIONARY COMPUTATION (CEC), 2013, Cancún. \textbf{Proceedings...} Cancún: IEEE, 2013a. p. 1771-1778.
+}
+
+\bibitem[Oliveira et al. 2013]{Oliveira2013b}
+\abntrefinfo{Oliveira et al.}{OLIVEIRA et al.}{2013b}
+{
+OLIVEIRA, R. R. R. de et al. Programação automática de redes de sensores sem fio utilizando programação genética. In: WORKSHOP DE SISTEMAS DISTRIBUÍDOS AUTONÔMICOS, 3., 2013, Brasília. \textbf{Anais...} Brasília: SBC, 2013b. p. 45-48.
+}
+
+\bibitem[Pattananupong, Chaiyaratana e Tongpadungrod 2007]{Pattananupong2007}
+\abntrefinfo{Pattananupong, Chaiyaratana e Tongpadungrod}{PATTANANUPONG;
+  CHAIYARATANA; TONGPADUNGROD}{2007}
+{
+PATTANANUPONG, U.; CHAIYARATANA, N.; TONGPADUNGROD, R. Genetic programming and neural networks as interpreters for a distributive tactile sensing system. In: EVOLUTIONARY COMPUTATION (CEC), 2007, Singapore. \textbf{Proceedings...} Singapore: IEEE, 2007. p. 4027-4034.
+}
+
+\bibitem[Toledo et al. 2009]{Toledo2009}
+\abntrefinfo{Toledo et al.}{TOLEDO et al.}{2009}
+{
+TOLEDO, C. F. M. et al. Multipopulation genetic algorithm to solve the synchronized and integrated two-level lot-sizing and scheduling problem. \textbf{International Journal of Production Research}, London, v. 47, n. 11, p. 3097-3119, 2009.
+}
+
+\bibitem[Tripathi et al. 2011]{Tripathi2011}
+\abntrefinfo{Tripathi et al.}{TRIPATHI et al.}{2011}
+{
+TRIPATHI, A. et al. Wireless sensor placement using hybrid genetic programming and genetic algorithm. \textbf{International Journal on Intelligent Information Technologies}, Hershey, v. 7, n. 2, p. 63-83, 2011.
+}
+
+\bibitem[Wang et al. 2008]{Wang2008}
+\abntrefinfo{Wang et al.}{WANG et al.}{2008}
+{
+WANG, M. M. et al. Middleware for wireless sensor networks: a survey. \textbf{Journal of Computer Science and Technology}, London, v. 23, n. 3, p. 305-326, May 2008.
+}
+
+\bibitem[Weise 2006]{ThomasWeise2006}
+\abntrefinfo{Weise}{WEISE}{2006}
+{
+WEISE, T. \textbf{Genetic programming for sensor networks.} Kassel: University of Kassel, 2006. 16 p.
+}
+
+\bibitem[Weise e Zapf 2009]{ThomasWeise2009}
+\abntrefinfo{Weise e Zapf}{WEISE; ZAPF}{2009}
+{
+WEISE, T.; ZAPF, M. Evolving distributed algorithms with genetic programming: election. In: ACM/SIGEVO SUMMIT ON GENETIC AND EVOLUTIONARY COMPUTATION, 5., 2009, New York. \textbf{Proceedings...} New York: ACM, 2009. p. 577-584.
+}
+
+\bibitem[Xue et al. 2007]{Xue2007}
+\abntrefinfo{Xue et al.}{XUE et al.}{2007}
+{
+XUE, Y. et al. Performance evaluation of ns-2 simulator for wireless sensor networks. In: CANADIAN CONFERENCE ON ELECTRICAL AND COMPUTER ENGINEERING (CCECE), 2007, Vancouver. \textbf{Proceedings...} Vancouver: IEEE, 2007. p. 1372-1375.
+}
+
+\bibitem[Yang 2010]{Yang2010}
+\abntrefinfo{Yang}{YANG}{2010}
+{
+YANG, H. C. The application of the wireless sensor network (wsn) in the monitoring of fushun reach river in china. In: COMPUTER AND NETWORK TECHNOLOGY, 2., 2010, Bangkok. \textbf{Proceedings...} Bangkok: IEEE, 2010. p. 331-333.
+}
+
+\end{thebibliography}
+
+\end{document}

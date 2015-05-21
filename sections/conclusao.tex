@@ -1,0 +1,17 @@
+\section{CONCLUSÃO E TRABALHOS FUTUROS}
+\label{sec:conclusion}
+O presente estudo propõe o desenvolvimento de um \emph{framework} que seja capaz de gerar aplicações para RSSF de forma automatizada. Esta ferramenta foi desenvolvida em três módulos que se complementam, um simulador de RSSF, um \emph{middleware} para RSSF que provê uma linguagem de \emph{scripts} para descrever aplicações, e um módulo de Programação Genétic (PG).
+
+O \emph{middleware} proposto gerencia os recursos de hardware dos nós sensores da RSSF e fornece funcionalidades pré programadas para os usuários. Ele também possui um máquina virtual capaz de interpretar \emph{scripts} de controle escritos em uma linguagem pré definida. O módulo de simulação é utilizado para realizar a avaliação dos programas gerados de forma automatizada pelo módulo de PG. A PG utiliza um algoritmo evolutivo para gerar programas descritos nessa linguagem de \emph{scripts}.
+
+A junção destes três módulos forma um \emph{framework} para que projetistas de RSSF possam gerar aplicações para diferentes problemas de forma automatizada. Basta o projetista definir uma função objetivo que descreva o problema que ele quer tratar com a RSSF e o \emph{framework} se encarrega de gerar um \emph{script} de controle que solucione este problema com uma boa performance.
+
+Para avaliar a qualidade e a capacidade do \emph{framework} proposto em atingir seu objetivo, o Problema de Detecção de Eventos (PDE) foi utilizado como caso de teste. Foi criado um gerador de instâncias para o PDE e um \emph{benchmark} com oito instâncias de testes. Experimentos computacionais foram realizados utilizando-se este \emph{benchmark}.
+
+Os resultados obtidos nos experimentos mostram que a ferramenta desenvolvida é capaz de solucionar de maneira ótima o PDE para RSSF com topologia em grade, independente do número de nós sensores considerados. Em instâncias com topologia randômica, a ferramenta foi capaz de solucionar o PDE com uma qualidade de soluções satisfatória, mesmo contemplando redes extensas (RSSF com mais de 600 nós sensores). Apesar disso, o método mostrou-se um pouco instável para instâncias cuja a rede possui uma topologia complexa. A qualidade das soluções encontradas em diversas execuções para as mesmas instâncias variou em alguns casos.
+
+Contudo, o \emph{framework} foi capaz de solucionar o PDE em todas as oito instâncias tratadas nos experimentos computacionais. Isso mostra que o este trabalho conseguiu atingir seus objetivos iniciais e que o método desenvolvido é promissor no contexto de geração automática de aplicações para RSSF. Essa geração automatizada de aplicações para RSSF pode reduzir bastante os custos de implementação, uma vez que visa eliminar a maior parte do trabalho humano na programação dos nós sensores da rede.
+
+Apesar do sucesso em solucionar o PDE, o \emph{framework} ainda possui vários pontos de atenção que não foram tratados no presente estudo. Como trabalho futuro, a ferramenta pode ser testada em instâncias mais complexas do PDE, por exemplo instâncias que contemplem simultaneamente mais de um tipo de evento. Além disso,  experimentos com nós sensores reais são necessários, uma vez que são importantes para constatar definitivamente a qualidade da abordagem proposta.
+
+Em um estudo mais avançado, o \emph{framework} pode ser melhorado para que a linguagem \emph{script} fornecida pelo \emph{middleware} tenha uma maior expressividade. Dessa forma, a ferramenta poderia ser utilizada para solucionar outros problemas de RSSF que sejam mais complexos.

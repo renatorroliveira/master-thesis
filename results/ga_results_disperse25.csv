@@ -1,0 +1,588 @@
+
+
+|===,Execution:,1,===|
+
+Generation,Time,Best Value
+0,0,2.30436e+07
+100,17,105
+200,21,53
+300,26,53
+400,32,53
+500,37,53
+600,42,53
+700,47,53
+800,52,53
+900,57,53
+1000,63,53
+1100,68,53
+1200,73,53
+1300,78,53
+1400,84,53
+1500,89,53
+1600,95,53
+1700,99,38
+1800,103,36
+1900,107,36
+2000,112,36
+
+Best Individual found: 36
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 32
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 36
+====================
+
+if (active[0] AND active[0]) {
+passive[0] = false
+send(0, true, 'up')
+}
+if (active[4] AND passive[0]) {
+passive[0] = true
+passive[0] = false
+send(0, true, 'left')
+}
+if (passive[0] AND active[3]) {
+send(0, true, 'right')
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'up')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1701,100,36
+
+
+
+|===,Execution:,2,===|
+
+Generation,Time,Best Value
+0,0,7.19033e+06
+100,12,97
+200,16,93
+300,21,93
+400,25,93
+500,29,93
+600,33,93
+700,37,93
+800,43,93
+900,47,93
+1000,51,32
+1100,55,32
+1200,58,30
+1300,60,30
+1400,63,30
+1500,66,30
+1600,69,30
+1700,72,30
+1800,75,30
+1900,78,30
+2000,81,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (active[4] AND passive[0]) {
+send(0, true, 'down')
+}
+if (passive[0] AND active[1]) {
+passive[0] = true
+passive[0] = true
+passive[0] = true
+send(0, true, 'up')
+}
+if (active[2] AND passive[0]) {
+send(0, true, 'down')
+}
+if (active[0] OR passive[0]) {
+passive[0] = true
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1148,56,30
+
+
+
+|===,Execution:,3,===|
+
+Generation,Time,Best Value
+0,0,72186.8
+100,5,89
+200,8,34
+300,11,30
+400,14,30
+500,17,30
+600,21,30
+700,23,30
+800,26,30
+900,29,30
+1000,33,30
+1100,36,30
+1200,39,30
+1300,42,30
+1400,45,30
+1500,48,30
+1600,52,30
+1700,54,30
+1800,57,30
+1900,60,30
+2000,63,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (active[2] AND passive[0]) {
+send(0, true, 'down')
+}
+if (active[1] AND passive[0]) {
+send(0, true, 'up')
+}
+if (passive[0] AND active[4]) {
+send(0, true, 'down')
+}
+if (passive[0] OR active[0]) {
+passive[0] = true
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,218,8,30
+
+
+
+|===,Execution:,4,===|
+
+Generation,Time,Best Value
+0,0,1.73246e+07
+100,14,282
+200,25,282
+300,32,149
+400,37,129
+500,43,30
+600,47,30
+700,50,30
+800,53,30
+900,56,30
+1000,59,30
+1100,62,30
+1200,65,30
+1300,68,30
+1400,71,30
+1500,75,30
+1600,77,30
+1700,80,30
+1800,83,30
+1900,86,30
+2000,89,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (active[1] AND passive[0]) {
+send(0, true, 'up')
+}
+if (active[0] AND active[0]) {
+passive[0] = false
+send(0, true, 'left')
+}
+if (active[4] AND passive[0]) {
+passive[0] = true
+send(0, true, 'down')
+}
+if (active[2] AND passive[0]) {
+send(0, true, 'down')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,500,43,30
+
+
+
+|===,Execution:,5,===|
+
+Generation,Time,Best Value
+0,0,72186.8
+100,5,54
+200,11,53
+300,15,53
+400,20,53
+500,25,53
+600,30,53
+700,35,53
+800,40,53
+900,45,53
+1000,50,53
+1100,55,53
+1200,60,53
+1300,65,53
+1400,70,53
+1500,76,53
+1600,81,53
+1700,86,53
+1800,91,53
+1900,96,53
+2000,100,53
+
+Best Individual found: 53
+====================
+Fitness Program Size: 3
+Fitness Packets Sent: 50
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 53
+====================
+
+if (active[0] OR active[0]) {
+send(0, true, 'up')
+}
+if (active[4] AND passive[0]) {
+passive[0] = false
+send(0, true, 'left')
+}
+if (passive[0] OR passive[0]) {
+send(0, true, 'right')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,109,6,53
+
+
+
+|===,Execution:,6,===|
+
+Generation,Time,Best Value
+0,0,1.63007e+07
+100,13,240
+200,20,227
+300,27,145
+400,32,101
+500,37,32
+600,40,30
+700,43,30
+800,46,30
+900,49,30
+1000,52,30
+1100,55,30
+1200,58,30
+1300,61,30
+1400,64,30
+1500,66,30
+1600,69,30
+1700,72,30
+1800,75,30
+1900,78,30
+2000,81,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (passive[0] AND active[1]) {
+passive[0] = true
+send(0, true, 'up')
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'down')
+passive[0] = true
+}
+if (active[4] AND passive[0]) {
+send(0, true, 'down')
+}
+if (passive[0] OR active[0]) {
+passive[0] = true
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,520,38,30
+
+
+
+|===,Execution:,7,===|
+
+Generation,Time,Best Value
+0,0,114672
+100,15,298
+200,25,117
+300,29,83
+400,34,77
+500,38,39
+600,42,30
+700,46,30
+800,49,30
+900,53,30
+1000,56,30
+1100,60,30
+1200,64,30
+1300,67,30
+1400,71,30
+1500,74,30
+1600,78,30
+1700,82,30
+1800,86,30
+1900,89,30
+2000,93,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (active[0] AND active[0]) {
+passive[0] = false
+send(0, true, 'left')
+}
+if (passive[0] AND active[1]) {
+passive[0] = true
+passive[0] = false
+passive[0] = false
+send(0, true, 'up')
+}
+if (passive[0] AND active[2]) {
+passive[0] = true
+send(0, true, 'down')
+}
+if (passive[0] AND active[4]) {
+send(0, true, 'down')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,557,40,30
+
+
+
+|===,Execution:,8,===|
+
+Generation,Time,Best Value
+0,0,3.16014e+07
+100,20,282
+200,33,282
+300,43,282
+400,54,282
+500,65,282
+600,73,93
+700,78,93
+800,83,93
+900,88,93
+1000,93,93
+1100,98,93
+1200,103,32
+1300,106,32
+1400,109,30
+1500,111,30
+1600,114,30
+1700,117,30
+1800,119,30
+1900,122,30
+2000,125,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (active[2] AND passive[0]) {
+send(0, true, 'down')
+passive[0] = true
+}
+if (passive[0] AND active[1]) {
+send(0, true, 'up')
+}
+if (active[4] AND passive[0]) {
+send(0, true, 'down')
+}
+if (active[0] AND active[0]) {
+passive[0] = true
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,1316,106,30
+
+
+
+|===,Execution:,9,===|
+
+Generation,Time,Best Value
+0,0,1.63007e+07
+100,8,78
+200,11,78
+300,15,78
+400,18,36
+500,22,36
+600,25,31
+700,28,30
+800,30,30
+900,33,30
+1000,36,30
+1100,38,30
+1200,41,30
+1300,44,30
+1400,47,30
+1500,49,30
+1600,52,30
+1700,55,30
+1800,58,30
+1900,60,30
+2000,64,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (active[1] AND passive[0]) {
+passive[0] = true
+send(0, true, 'up')
+}
+if (active[4] AND passive[0]) {
+send(0, true, 'down')
+}
+if (active[0] AND active[0]) {
+send(0, true, 'left')
+}
+if (passive[0] AND active[2]) {
+send(0, true, 'down')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,652,26,30
+
+
+
+|===,Execution:,10,===|
+
+Generation,Time,Best Value
+0,0,1.3545e+07
+100,6,89
+200,9,39
+300,12,39
+400,16,30
+500,20,30
+600,24,30
+700,27,30
+800,32,30
+900,36,30
+1000,40,30
+1100,44,30
+1200,48,30
+1300,51,30
+1400,56,30
+1500,59,30
+1600,63,30
+1700,67,30
+1800,71,30
+1900,75,30
+2000,79,30
+
+Best Individual found: 30
+====================
+Fitness Program Size: 4
+Fitness Packets Sent: 26
+Fitness Packets Sent Away from Sink: 0
+Fitness Packets Sent Before any Trigger: 0
+Fitness Event Active Before any Trigger: 0
+Fitness Triggers not Reached any Sink: 0
+Fitness Triggers Min Distance to Sink: 0
+Total Fitness: 30
+====================
+
+if (active[0] AND active[0]) {
+send(0, true, 'left')
+}
+if (active[2] AND passive[0]) {
+passive[0] = true
+send(0, true, 'down')
+}
+if (passive[0] AND active[1]) {
+passive[0] = true
+passive[0] = false
+send(0, true, 'up')
+}
+if (active[4] AND passive[0]) {
+send(0, true, 'down')
+}
+
+
+Best,Result
+Type,Generation,Time,Value
+Best,380,15,30
+
